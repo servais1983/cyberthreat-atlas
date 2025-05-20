@@ -1,1 +1,112 @@
-/**\n * Serveur principal de l'application CyberThreat Atlas\n */\n\n// Importations des modules\nconst express = require('express');\nconst helmet = require('helmet');\nconst compression = require('compression');\nconst cors = require('cors');\nconst morgan = require('morgan');\nconst rateLimit = require('express-rate-limit');\n\n// Importation des configurations et services\nconst config = require('./config');\nconst connectDB = require('./database');\n// const logger = require('./utils/logger');\n\n// Création de l'application Express\nconst app = express();\n\n// Middlewares de sécurité et performance\napp.use(helmet()); // Protection contre les vulnérabilités web courantes\napp.use(compression()); // Compression gzip des réponses\n\n// Configuration CORS\napp.use(cors({\n  origin: config.cors.origin,\n  methods: config.cors.methods,\n  allowedHeaders: config.cors.allowedHeaders\n}));\n\n// Limitation des requêtes (protection contre les attaques DDoS)\nconst limiter = rateLimit({\n  windowMs: config.security.rateLimitWindow,\n  max: config.security.rateLimitMax,\n  message: 'Trop de requêtes depuis cette IP, veuillez réessayer plus tard.'\n});\napp.use('/api/', limiter); // Applique le rate limiting aux routes API\n\n// Logging des requêtes HTTP\napp.use(morgan(config.logging.format));\n\n// Parsers pour les requêtes\napp.use(express.json({ limit: '10mb' }));\napp.use(express.urlencoded({ extended: true, limit: '10mb' }));\n\n// Route de base pour vérifier que l'API fonctionne\napp.get('/', (req, res) => {\n  res.json({\n    name: 'CyberThreat Atlas API',\n    version: '1.0.0',\n    status: 'running'\n  });\n});\n\n// Import et montage des routes API\n// const apiRoutes = require('./routes');\n// app.use('/api/v1', apiRoutes);\n\n// Middleware de gestion des erreurs 404 (routes non trouvées)\napp.use((req, res, next) => {\n  res.status(404).json({\n    error: 'Not Found',\n    message: `La route ${req.originalUrl} n'existe pas`\n  });\n});\n\n// Middleware de gestion des erreurs générales\napp.use((err, req, res, next) => {\n  console.error(err.stack);\n  const statusCode = err.statusCode || 500;\n  res.status(statusCode).json({\n    error: err.name || 'Server Error',\n    message: err.message || 'Une erreur interne est survenue',\n    stack: config.env === 'development' ? err.stack : undefined\n  });\n});\n\n// Démarrage du serveur\nconst startServer = async () => {\n  try {\n    // Connexion à MongoDB\n    await connectDB();\n    \n    // Démarrage du serveur HTTP\n    const PORT = config.server.port;\n    app.listen(PORT, () => {\n      console.log(`Serveur démarré sur le port ${PORT} en mode ${config.env}`);\n    });\n  } catch (error) {\n    console.error('Erreur lors du démarrage du serveur:', error);\n    process.exit(1);\n  }\n};\n\n// Gestion des signaux pour l'arrêt gracieux\nprocess.on('SIGTERM', () => {\n  console.log('Signal SIGTERM reçu. Arrêt gracieux du serveur...');\n  process.exit(0);\n});\n\n// Lancer le serveur\nstartServer();\n\n// Export pour les tests\nmodule.exports = app;
+/**
+ * Serveur principal de l'application CyberThreat Atlas
+ */
+
+// Importations des modules
+const express = require('express');
+const helmet = require('helmet');
+const compression = require('compression');
+const cors = require('cors');
+const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+
+// Importation des configurations et services
+const config = require('./config');
+const connectDB = require('./database');
+// const logger = require('./utils/logger');
+
+// Importation des routes
+const authRoutes = require('./routes/auth');
+const attackGroupRoutes = require('./routes/attackGroups');
+const campaignRoutes = require('./routes/campaigns');
+
+// Création de l'application Express
+const app = express();
+
+// Middlewares de sécurité et performance
+app.use(helmet()); // Protection contre les vulnérabilités web courantes
+app.use(compression()); // Compression gzip des réponses
+
+// Configuration CORS
+app.use(cors({
+  origin: config.cors.origin,
+  methods: config.cors.methods,
+  allowedHeaders: config.cors.allowedHeaders
+}));
+
+// Limitation des requêtes (protection contre les attaques DDoS)
+const limiter = rateLimit({
+  windowMs: config.security.rateLimitWindow,
+  max: config.security.rateLimitMax,
+  message: 'Trop de requêtes depuis cette IP, veuillez réessayer plus tard.'
+});
+app.use('/api/', limiter); // Applique le rate limiting aux routes API
+
+// Logging des requêtes HTTP
+app.use(morgan(config.logging.format));
+
+// Parsers pour les requêtes
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Route de base pour vérifier que l'API fonctionne
+app.get('/', (req, res) => {
+  res.json({
+    name: 'CyberThreat Atlas API',
+    version: '1.0.0',
+    status: 'running'
+  });
+});
+
+// Montage des routes API
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/attack-groups', attackGroupRoutes);
+app.use('/api/v1/campaigns', campaignRoutes);
+
+// Middleware de gestion des erreurs 404 (routes non trouvées)
+app.use((req, res, next) => {
+  res.status(404).json({
+    error: 'Not Found',
+    message: `La route ${req.originalUrl} n'existe pas`
+  });
+});
+
+// Middleware de gestion des erreurs générales
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  const statusCode = err.statusCode || 500;
+  res.status(statusCode).json({
+    error: err.name || 'Server Error',
+    message: err.message || 'Une erreur interne est survenue',
+    stack: config.env === 'development' ? err.stack : undefined
+  });
+});
+
+// Démarrage du serveur
+const startServer = async () => {
+  try {
+    // Connexion à MongoDB
+    await connectDB();
+    
+    // Démarrage du serveur HTTP
+    const PORT = config.server.port;
+    app.listen(PORT, () => {
+      console.log(`Serveur démarré sur le port ${PORT} en mode ${config.env}`);
+    });
+  } catch (error) {
+    console.error('Erreur lors du démarrage du serveur:', error);
+    process.exit(1);
+  }
+};
+
+// Gestion des signaux pour l'arrêt gracieux
+process.on('SIGTERM', () => {
+  console.log('Signal SIGTERM reçu. Arrêt gracieux du serveur...');
+  process.exit(0);
+});
+
+// Lancer le serveur
+startServer();
+
+// Export pour les tests
+module.exports = app;
