@@ -1,148 +1,343 @@
-# CyberThreat Atlas
+<p align="center">
+  <img src="https://raw.githubusercontent.com/servais1983/cyberthreat-atlas/main/frontend/src/assets/images/cyberthreat-atlas-logo.png" alt="CyberThreat Atlas Logo" width="250"/>
+</p>
 
-Un outil visuel et dynamique pour recenser les techniques et campagnes d'attaques cyber mondiales.
+<h1 align="center">CyberThreat Atlas</h1>
 
-## Objectifs du projet
+<p align="center">
+  <b>Une plateforme professionnelle de cartographie et d'analyse des menaces cyber mondiales</b>
+</p>
 
-CyberThreat Atlas est une application web conçue pour fournir une vue complète et interactive des menaces cyber à l'échelle mondiale. Elle permet aux analystes SOC, chercheurs en sécurité et professionnels de la cybersécurité de :
+<p align="center">
+  <a href="#aperçu">Aperçu</a> •
+  <a href="#fonctionnalités">Fonctionnalités</a> •
+  <a href="#architecture">Architecture</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#utilisation">Utilisation</a> •
+  <a href="#déploiement">Déploiement</a> •
+  <a href="#api-documentation">API</a> •
+  <a href="#technologies">Technologies</a> •
+  <a href="#captures-décran">Captures d'écran</a> •
+  <a href="#roadmap">Roadmap</a> •
+  <a href="#licence">Licence</a>
+</p>
 
-- **Référencer dynamiquement** toutes les techniques et campagnes d'attaque connues
-- **Rechercher et filtrer** les menaces par pays, groupe, type d'attaque, période et sévérité
-- **Visualiser les données** sous forme de cartes, graphiques de lien, timelines et tableaux interactifs
-- **Accéder à des sources fiables** via des liens vers MITRE ATT&CK, Mandiant, CrowdStrike, etc.
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version 1.0.0">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License MIT">
+  <img src="https://img.shields.io/badge/node-v18+-green.svg" alt="Node v18+">
+  <img src="https://img.shields.io/badge/react-v18.2.0-blue.svg" alt="React v18.2.0">
+  <img src="https://img.shields.io/badge/express-v4.18.2-lightgrey.svg" alt="Express v4.18.2">
+  <img src="https://img.shields.io/badge/mongodb-v8.0.0-green.svg" alt="MongoDB v8.0.0">
+</p>
 
-## Fonctionnalités principales
+## Aperçu
 
-- 🔍 Système de recherche avancée multi-critères
-- 🌐 Cartographie mondiale des attaques 
-- 📊 Visualisations interactives des relations entre groupes, techniques et cibles
-- 📈 Timeline des campagnes d'attaque
-- 🔄 Veille automatisée des nouvelles menaces
-- 📱 Interface responsive et professionnelle
+CyberThreat Atlas est une solution de cybersécurité de pointe conçue pour surveiller, analyser et visualiser les menaces cyber à l'échelle mondiale. Cette plateforme permet aux professionnels de la sécurité informatique de suivre les groupes d'attaque (APTs), leurs techniques, les campagnes d'attaque et les tendances émergentes.
 
-## Architecture technique
+Développée pour les analystes SOC, chercheurs en sécurité et professionnels de la cybersécurité, elle offre une visualisation interactive des données de renseignement sur les menaces informatiques, permettant de mieux comprendre le paysage des menaces cyber et d'améliorer la posture de sécurité des organisations.
 
-- **Frontend** : React.js avec TypeScript
-- **Backend** : Node.js/Express
-- **Base de données** : MongoDB
-- **APIs** : Intégration avec MITRE ATT&CK, VirusTotal, Shodan, etc.
-- **Visualisations** : D3.js, Leaflet, React-vis
+## Fonctionnalités
 
-## Structure du projet
+### 🌍 Visualisations Interactives
+- **Carte mondiale des menaces** - Visualisation géographique des attaques en temps réel
+- **Graphe de relations** - Exploration des liens entre acteurs, techniques et cibles
+- **Timeline des campagnes** - Chronologie interactive des campagnes d'attaque
 
-Le projet est organisé en deux parties principales :
+### 🔍 Système de Recherche Avancée
+- Filtrage multi-critères (groupe, technique, région, sévérité, période...)
+- Interface intuitive avec sélection de filtres en temps réel
+- Recherche textuelle avec suggestions intelligentes
+
+### 📊 Analyse Approfondie
+- Profils détaillés des groupes d'attaque (APTs)
+- Analyse des techniques selon le framework MITRE ATT&CK
+- Statistiques et métriques sur les tendances des menaces
+
+### 🔐 Système d'Authentification Robuste
+- Gestion des utilisateurs avec différents niveaux d'accès
+- Authentification sécurisée via JWT
+- Protection des routes sensibles
+
+### 🔄 Intégration et Veille
+- Connexions avec des sources externes de renseignement
+- Mise à jour automatique des données de menaces
+- Système d'alerte pour les nouvelles campagnes
+
+### 📱 Interface Responsive
+- Expérience utilisateur optimisée sur tous les appareils
+- Mode clair/sombre adaptable aux préférences
+- Design moderne et professionnel
+
+## Architecture
+
+CyberThreat Atlas suit une architecture moderne client-serveur avec séparation claire des responsabilités :
 
 ### Backend (Node.js/Express + MongoDB)
 
-Nous avons mis en place :
-* Une structure de base de données MongoDB avec des modèles pour :
-   * Groupes d'attaque (APTs)
-   * Techniques d'attaque (basées sur MITRE ATT&CK)
-   * Campagnes d'attaque
-   * Malwares et outils
-   * Indicateurs de compromission (IOCs)
-   * Secteurs d'activité ciblés
-   * Régions géographiques
-* Une configuration pour la connexion à la base de données
-* Un serveur Express avec middleware de sécurité
-* Un système de configuration centralisé
+```
+backend/
+├── src/
+│   ├── config/        # Configuration de l'application
+│   ├── controllers/   # Contrôleurs pour la logique métier
+│   ├── database/      # Configuration et connexion à MongoDB
+│   ├── middleware/    # Middlewares Express (auth, validation...)
+│   ├── models/        # Modèles de données MongoDB
+│   ├── routes/        # Définition des routes API
+│   ├── services/      # Services métier et intégrations externes
+│   ├── utils/         # Utilitaires divers
+│   └── server.js      # Point d'entrée principal
+├── .env.example       # Variables d'environnement (exemple)
+└── package.json       # Dépendances et scripts
+```
 
 ### Frontend (React)
 
-Le frontend comprend :
-* Une structure de base avec React Router
-* Un système de thème (mode clair/sombre)
-* Des composants de mise en page (Header, Sidebar, Footer)
-* Des composants prévus pour les visualisations interactives :
-   * Carte du monde des menaces
-   * Graphe de relations
-   * Timeline des attaques
-* Un système de filtrage avancé pour la recherche
+```
+frontend/
+├── public/            # Fichiers statiques
+├── src/
+│   ├── assets/        # Images, icônes, ressources
+│   ├── components/    # Composants réutilisables
+│   │   ├── Auth/      # Composants d'authentification
+│   │   ├── Filters/   # Système de filtrage
+│   │   ├── Layout/    # Structure de l'interface
+│   │   └── Visualizations/ # Composants de visualisation
+│   ├── contexts/      # Contextes React (auth, thème...)
+│   ├── pages/         # Pages de l'application
+│   ├── services/      # Services et appels API
+│   ├── utils/         # Fonctions utilitaires
+│   ├── App.js         # Composant racine
+│   └── index.js       # Point d'entrée
+└── package.json       # Dépendances et scripts
+```
 
-## Prochaines étapes
+## Installation
 
-Pour finaliser le développement du projet CyberThreat Atlas, les tâches suivantes doivent être réalisées :
+### Prérequis
 
-### 1. Développement Backend
+- Node.js (v18 ou supérieur)
+- MongoDB (v5 ou supérieur)
+- npm ou yarn
 
-- **Implémentation des routes API REST :**
-  - Créer les contrôleurs pour chaque modèle (AttackGroup, Campaign, Indicator, etc.)
-  - Développer les routes CRUD complètes (GET, POST, PUT, DELETE)
-  - Implémenter des endpoints de recherche avancée avec filtrage multicritères
-  - Ajouter des validations de données avec Joi ou express-validator
+### Installation du Backend
 
-- **Système d'authentification et d'autorisation :**
-  - Mettre en place JWT pour l'authentification
-  - Créer des middlewares de contrôle d'accès
-  - Définir différents niveaux d'utilisateurs (admin, analyste, lecteur)
-  - Implémenter la gestion des sessions
+```bash
+# Cloner le dépôt
+git clone https://github.com/servais1983/cyberthreat-atlas.git
+cd cyberthreat-atlas
 
-- **Intégration des APIs externes :**
-  - Développer des connecteurs pour MITRE ATT&CK Framework
-  - Intégrer des APIs de renseignement sur les menaces (VirusTotal, AlienVault OTX, etc.)
-  - Créer un système de synchronisation périodique des données externes
+# Installer les dépendances backend
+cd backend
+npm install
 
-### 2. Développement Frontend
+# Configurer les variables d'environnement
+cp .env.example .env
+# Modifiez le fichier .env selon votre environnement
 
-- **Composants de visualisation :**
-  - Développer la carte mondiale des menaces avec Leaflet ou D3.js
-  - Créer le graphe de relations entre acteurs/techniques/cibles
-  - Implémenter la timeline interactive des campagnes d'attaque
-  - Concevoir des tableaux de bord analytiques avec filtres dynamiques
+# Initialiser la base de données avec des données de démonstration (optionnel)
+npm run seed
 
-- **Pages et fonctionnalités utilisateur :**
-  - Créer les pages de détail pour chaque entité (groupe, campagne, etc.)
-  - Développer un système de favoris/surveillance
-  - Implémenter la gestion des profils utilisateurs
-  - Ajouter des fonctionnalités d'export (PDF, CSV, JSON)
+# Lancer le serveur de développement
+npm run dev
+```
 
-- **Améliorations UX/UI :**
-  - Optimiser les performances des visualisations avec des rendus conditionnels
-  - Améliorer l'accessibilité de l'interface
-  - Implémenter des animations et transitions fluides
-  - Assurer la compatibilité mobile (responsive design)
+### Installation du Frontend
 
-### 3. Tests et Assurance Qualité
+```bash
+# Dans un nouveau terminal, depuis la racine du projet
+cd frontend
+npm install
 
-- **Tests automatisés :**
-  - Développer des tests unitaires pour le backend (Jest)
-  - Créer des tests d'intégration pour l'API (Supertest)
-  - Implémenter des tests end-to-end (Cypress ou Playwright)
-  - Mettre en place des tests de performance (k6 ou JMeter)
+# Lancer l'application React
+npm start
+```
 
-- **CI/CD :**
-  - Configurer un pipeline d'intégration continue avec GitHub Actions
-  - Mettre en place des environnements de test, staging et production
-  - Automatiser les déploiements avec vérifications de qualité
+L'application sera accessible à l'adresse [http://localhost:3000](http://localhost:3000).
 
-### 4. Système de veille automatique
+## Utilisation
 
-- **Collecteurs de données :**
-  - Développer des crawlers pour les sources d'information de sécurité
-  - Créer des connecteurs RSS pour les flux d'actualités cybersécurité
-  - Implémenter un système de parsing pour extraire les IOCs des rapports
-  
-- **Analyse et enrichissement :**
-  - Mettre en place des algorithmes de classification des menaces
-  - Développer des fonctionnalités de corrélation entre différentes sources
-  - Créer un système d'alertes basé sur des seuils configurables
+### Tableau de Bord Principal
 
-### 5. Documentation et Déploiement
+Le tableau de bord principal offre trois visualisations principales accessibles via des onglets :
 
-- **Documentation :**
-  - Rédiger une documentation technique complète du projet
-  - Créer des guides utilisateurs avec captures d'écran
-  - Documenter les APIs pour faciliter l'intégration avec d'autres outils
+1. **Carte Mondiale des Menaces** - Visualisation géographique des attaques avec filtrage par sévérité, période et groupes d'attaque.
 
-- **Déploiement :**
-  - Configurer l'infrastructure cloud (AWS, Azure ou GCP)
-  - Mettre en place des conteneurs Docker pour faciliter le déploiement
-  - Implémenter un système de monitoring et de logging
+2. **Graphe de Relations** - Exploration interactive des liens entre groupes d'attaque, techniques et secteurs ciblés. Permet de découvrir les relations et modèles d'attaque.
 
-## Installation et déploiement
+3. **Timeline des Campagnes** - Chronologie des campagnes d'attaque permettant d'analyser les tendances temporelles et l'évolution des tactiques.
 
-_Instructions détaillées à venir_
+### Système de Filtrage
+
+Le panneau de filtrage avancé permet de :
+
+- Sélectionner un groupe d'attaque spécifique
+- Filtrer par techniques d'attaque
+- Sélectionner les secteurs et régions d'intérêt
+- Définir une période temporelle
+- Filtrer par niveau de sévérité et statut
+
+Les filtres s'appliquent en temps réel sur toutes les visualisations.
+
+### Détails des Entités
+
+Chaque élément (groupe, campagne, technique) est cliquable pour accéder à une vue détaillée contenant :
+
+- Informations complètes sur l'entité
+- Historique et évolution
+- Statistiques et métriques
+- Documentation et références externes
+
+### Authentification et Profil
+
+L'application dispose d'un système complet d'authentification :
+
+- Inscription et connexion
+- Gestion du profil utilisateur
+- Préférences personnalisées
+- Historique de recherche et favoris
+
+## Déploiement
+
+### Préparation pour la Production
+
+```bash
+# Construire le frontend pour la production
+cd frontend
+npm run build
+
+# Configurer le backend pour la production
+cd ../backend
+# Modifier .env pour l'environnement de production
+# NODE_ENV=production
+```
+
+### Options de Déploiement
+
+#### Docker Compose
+
+Un fichier docker-compose.yml est fourni pour faciliter le déploiement :
+
+```bash
+# Depuis la racine du projet
+docker-compose up -d
+```
+
+#### Déploiement Cloud
+
+Instructions pour AWS :
+
+1. Créer une instance EC2 ou un service ECS
+2. Configurer MongoDB Atlas ou un service RDS
+3. Déployer l'application avec le script fourni :
+
+```bash
+./scripts/deploy-aws.sh
+```
+
+#### Déploiement Manuel
+
+1. Configurer un serveur avec Node.js et MongoDB
+2. Configurer NGINX comme proxy inverse
+3. Utiliser PM2 pour gérer les processus Node.js :
+
+```bash
+npm install -g pm2
+cd backend
+pm2 start src/server.js --name cyberthreat-atlas
+```
+
+## API Documentation
+
+L'API REST est documentée avec Swagger et accessible à l'adresse `/api/docs` lorsque le serveur est en cours d'exécution.
+
+### Points d'Entrée Principaux
+
+| Méthode | Point d'entrée | Description |
+|---------|---------------|-------------|
+| GET | `/api/v1/attack-groups` | Liste des groupes d'attaque |
+| GET | `/api/v1/attack-groups/:id` | Détails d'un groupe d'attaque |
+| GET | `/api/v1/campaigns` | Liste des campagnes |
+| GET | `/api/v1/campaigns/timeline` | Données pour la timeline |
+| POST | `/api/v1/campaigns/search` | Recherche avancée de campagnes |
+| GET | `/api/v1/techniques` | Liste des techniques d'attaque |
+| POST | `/api/v1/auth/register` | Inscription d'un utilisateur |
+| POST | `/api/v1/auth/login` | Connexion utilisateur |
+
+Pour une documentation complète de l'API, consultez la documentation Swagger intégrée.
+
+## Technologies
+
+### Backend
+- **Node.js & Express** - Serveur API RESTful
+- **MongoDB & Mongoose** - Base de données et ODM
+- **JWT** - Authentification par token
+- **Joi** - Validation des données
+- **Winston** - Journalisation
+- **Node-cron** - Tâches planifiées
+
+### Frontend
+- **React** - Bibliothèque UI
+- **React Router** - Navigation
+- **Axios** - Client HTTP
+- **D3.js** - Visualisations de données avancées
+- **Leaflet** - Cartographie interactive
+- **Recharts** - Graphiques et diagrammes
+- **date-fns** - Manipulation de dates
+
+### DevOps & Qualité
+- **ESLint & Prettier** - Qualité du code
+- **Jest** - Tests unitaires
+- **Supertest** - Tests d'API
+- **Docker** - Conteneurisation
+- **GitHub Actions** - CI/CD
+
+## Captures d'Écran
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/servais1983/cyberthreat-atlas/main/docs/screenshots/dashboard-map.png" alt="Dashboard Map" width="800"/>
+  <em>Carte mondiale des menaces</em>
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/servais1983/cyberthreat-atlas/main/docs/screenshots/relationship-graph.png" alt="Relationship Graph" width="800"/>
+  <em>Graphe de relations entre acteurs et techniques</em>
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/servais1983/cyberthreat-atlas/main/docs/screenshots/campaign-timeline.png" alt="Campaign Timeline" width="800"/>
+  <em>Timeline des campagnes d'attaque</em>
+</p>
+
+## Roadmap
+
+### Version 1.1 (Q2 2025)
+- Intégration avec plus de sources de renseignement externes
+- Amélioration des algorithmes de corrélation
+- Support des IOCs plus détaillés
+
+### Version 1.2 (Q3 2025)
+- Système d'alertes en temps réel
+- Tableau de bord personnalisable
+- Export PDF des rapports d'analyse
+
+### Version 2.0 (Q1 2026)
+- Analyse prédictive des menaces
+- Module de simulation d'attaque
+- API publique pour l'intégration avec d'autres outils
 
 ## Licence
 
-MIT
+Ce projet est distribué sous licence MIT. Voir le fichier `LICENSE` pour plus d'informations.
+
+---
+
+<p align="center">
+  Développé avec ❤️ par l'équipe CyberThreat Atlas
+</p>
+
+<p align="center">
+  <a href="https://github.com/servais1983/cyberthreat-atlas/issues">Signaler un problème</a> •
+  <a href="https://github.com/servais1983/cyberthreat-atlas/discussions">Discussions</a> •
+  <a href="mailto:contact@cyberthreat-atlas.com">Contact</a>
+</p>
