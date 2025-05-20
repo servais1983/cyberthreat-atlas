@@ -1,1 +1,121 @@
-import React, { useState, useEffect } from 'react';\nimport { BrowserRouter as Router, Routes, Route } from 'react-router-dom';\nimport './App.css';\n\n// Import des composants de mise en page\nimport Header from './components/Layout/Header';\nimport Sidebar from './components/Layout/Sidebar';\nimport Footer from './components/Layout/Footer';\n\n// Import des pages principales\nimport Dashboard from './pages/Dashboard';\nimport GroupsList from './pages/GroupsList';\nimport GroupDetail from './pages/GroupDetail';\nimport TechniquesList from './pages/TechniquesList';\nimport TechniqueDetail from './pages/TechniqueDetail';\nimport CampaignsList from './pages/CampaignsList';\nimport CampaignDetail from './pages/CampaignDetail';\nimport MalwaresList from './pages/MalwaresList';\nimport MalwareDetail from './pages/MalwareDetail';\nimport WorldMap from './pages/WorldMap';\nimport RelationshipsGraph from './pages/RelationshipsGraph';\nimport Timeline from './pages/Timeline';\nimport NotFound from './pages/NotFound';\n\n// Import des services et contextes\nimport { ThemeProvider } from './contexts/ThemeContext';\n\nfunction App() {\n  const [sidebarOpen, setSidebarOpen] = useState(true);\n  const [loading, setLoading] = useState(true);\n  \n  // Simuler le chargement initial de l'application\n  useEffect(() => {\n    const timer = setTimeout(() => {\n      setLoading(false);\n    }, 1000);\n    \n    return () => clearTimeout(timer);\n  }, []);\n  \n  const toggleSidebar = () => {\n    setSidebarOpen(!sidebarOpen);\n  };\n  \n  if (loading) {\n    return (\n      <div className=\"loading-screen\">\n        <div className=\"loading-spinner\"></div>\n        <p>Chargement de CyberThreat Atlas...</p>\n      </div>\n    );\n  }\n  \n  return (\n    <ThemeProvider>\n      <Router>\n        <div className=\"app-container\">\n          <Header toggleSidebar={toggleSidebar} />\n          \n          <div className=\"app-main\">\n            <Sidebar isOpen={sidebarOpen} />\n            \n            <main className={`content-area ${sidebarOpen ? '' : 'content-expanded'}`}>\n              <Routes>\n                <Route path=\"/\" element={<Dashboard />} />\n                \n                {/* Routes pour les groupes d'attaque */}\n                <Route path=\"/groups\" element={<GroupsList />} />\n                <Route path=\"/groups/:id\" element={<GroupDetail />} />\n                \n                {/* Routes pour les techniques */}\n                <Route path=\"/techniques\" element={<TechniquesList />} />\n                <Route path=\"/techniques/:id\" element={<TechniqueDetail />} />\n                \n                {/* Routes pour les campagnes */}\n                <Route path=\"/campaigns\" element={<CampaignsList />} />\n                <Route path=\"/campaigns/:id\" element={<CampaignDetail />} />\n                \n                {/* Routes pour les malwares */}\n                <Route path=\"/malware\" element={<MalwaresList />} />\n                <Route path=\"/malware/:id\" element={<MalwareDetail />} />\n                \n                {/* Routes pour les visualisations */}\n                <Route path=\"/map\" element={<WorldMap />} />\n                <Route path=\"/relationships\" element={<RelationshipsGraph />} />\n                <Route path=\"/timeline\" element={<Timeline />} />\n                \n                {/* Route 404 */}\n                <Route path=\"*\" element={<NotFound />} />\n              </Routes>\n            </main>\n          </div>\n          \n          <Footer />\n        </div>\n      </Router>\n    </ThemeProvider>\n  );\n}\n\nexport default App;
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './App.css';
+
+// Import des composants de mise en page
+import Header from './components/Layout/Header';
+import Sidebar from './components/Layout/Sidebar';
+import Footer from './components/Layout/Footer';
+
+// Import des pages principales
+import Dashboard from './pages/Dashboard';
+import GroupsList from './pages/GroupsList';
+import GroupDetail from './pages/GroupDetail';
+import TechniquesList from './pages/TechniquesList';
+import TechniqueDetail from './pages/TechniqueDetail';
+import CampaignsList from './pages/CampaignsList';
+import CampaignDetail from './pages/CampaignDetail';
+import MalwaresList from './pages/MalwaresList';
+import MalwareDetail from './pages/MalwareDetail';
+import WorldMap from './pages/WorldMap';
+import RelationshipsGraph from './pages/RelationshipsGraph';
+import Timeline from './pages/Timeline';
+import NotFound from './pages/NotFound';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
+import ForgotPassword from './pages/Auth/ForgotPassword';
+import ResetPassword from './pages/Auth/ResetPassword';
+import Profile from './pages/Auth/Profile';
+
+// Import des services et contextes
+import { ThemeProvider } from './contexts/ThemeContext';
+import { AuthProvider } from './contexts/AuthContext';
+import PrivateRoute from './components/Auth/PrivateRoute';
+
+function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [loading, setLoading] = useState(true);
+  
+  // Simuler le chargement initial de l'application
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+  
+  if (loading) {
+    return (
+      <div className="loading-screen">
+        <div className="loading-spinner"></div>
+        <p>Chargement de CyberThreat Atlas...</p>
+      </div>
+    );
+  }
+  
+  return (
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <div className="app-container">
+            <Header toggleSidebar={toggleSidebar} />
+            
+            <div className="app-main">
+              <Sidebar isOpen={sidebarOpen} />
+              
+              <main className={`content-area ${sidebarOpen ? '' : 'content-expanded'}`}>
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  
+                  {/* Routes pour les groupes d'attaque */}
+                  <Route path="/groups" element={<GroupsList />} />
+                  <Route path="/groups/:id" element={<GroupDetail />} />
+                  
+                  {/* Routes pour les techniques */}
+                  <Route path="/techniques" element={<TechniquesList />} />
+                  <Route path="/techniques/:id" element={<TechniqueDetail />} />
+                  
+                  {/* Routes pour les campagnes */}
+                  <Route path="/campaigns" element={<CampaignsList />} />
+                  <Route path="/campaigns/:id" element={<CampaignDetail />} />
+                  
+                  {/* Routes pour les malwares */}
+                  <Route path="/malware" element={<MalwaresList />} />
+                  <Route path="/malware/:id" element={<MalwareDetail />} />
+                  
+                  {/* Routes pour les visualisations */}
+                  <Route path="/map" element={<WorldMap />} />
+                  <Route path="/relationships" element={<RelationshipsGraph />} />
+                  <Route path="/timeline" element={<Timeline />} />
+                  
+                  {/* Routes d'authentification */}
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/reset-password/:token" element={<ResetPassword />} />
+                  <Route path="/profile" element={
+                    <PrivateRoute>
+                      <Profile />
+                    </PrivateRoute>
+                  } />
+                  
+                  {/* Route 404 */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+            </div>
+            
+            <Footer />
+          </div>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
+  );
+}
+
+export default App;
