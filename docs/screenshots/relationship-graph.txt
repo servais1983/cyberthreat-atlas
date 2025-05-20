@@ -1,0 +1,1 @@
+Cette capture d'écran montre le graphe de relations qui visualise les connexions entre les groupes d'attaque (APTs), leurs techniques d'attaque préférées et les secteurs qu'ils ciblent. L'interface permet d'explorer interactivement les relations, de zoomer sur certaines parties du graphe et d'obtenir des informations détaillées sur chaque nœud.
