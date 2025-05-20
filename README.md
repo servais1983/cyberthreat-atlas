@@ -1,5 +1,4 @@
-![image](https://github.com/user-attachments/assets/9f4b561f-d37b-42fa-8541-a643a037e93e)
-
+![image](https://github.com/servais1983/cyberthreat-atlas/raw/main/frontend/src/assets/images/cyberthreat-atlas-logo.svg)
 
 <h1 align="center">CyberThreat Atlas</h1>
 
@@ -113,14 +112,47 @@ frontend/
 
 ## Installation
 
-### Prérequis
+### Méthode Rapide (Recommandée)
 
+Des scripts d'installation automatique sont fournis pour faciliter la mise en place :
+
+#### Sur Linux/macOS :
+```bash
+# Cloner le dépôt
+git clone https://github.com/servais1983/cyberthreat-atlas.git
+cd cyberthreat-atlas
+
+# Rendre le script exécutable
+chmod +x install.sh
+
+# Lancer l'installation
+./install.sh
+```
+
+#### Sur Windows :
+```powershell
+# Cloner le dépôt
+git clone https://github.com/servais1983/cyberthreat-atlas.git
+cd cyberthreat-atlas
+
+# Lancer l'installation
+.\install.bat
+```
+
+Le script effectuera automatiquement :
+- La vérification des prérequis (Node.js, MongoDB)
+- L'installation des dépendances backend et frontend
+- La création du fichier .env à partir du modèle
+- Le démarrage optionnel de l'application
+
+### Installation Manuelle
+
+#### Prérequis
 - Node.js (v18 ou supérieur)
 - MongoDB (v5 ou supérieur)
 - npm ou yarn
 
-### Installation du Backend
-
+#### Installation du Backend
 ```bash
 # Cloner le dépôt
 git clone https://github.com/servais1983/cyberthreat-atlas.git
@@ -141,8 +173,7 @@ npm run seed
 npm run dev
 ```
 
-### Installation du Frontend
-
+#### Installation du Frontend
 ```bash
 # Dans un nouveau terminal, depuis la racine du projet
 cd frontend
@@ -307,6 +338,31 @@ Pour une documentation complète de l'API, consultez la documentation Swagger in
   <img src="https://raw.githubusercontent.com/servais1983/cyberthreat-atlas/main/docs/screenshots/campaign-timeline.png" alt="Campaign Timeline" width="800"/>
   <em>Timeline des campagnes d'attaque</em>
 </p>
+
+## Résolution de Problèmes Courants
+
+### Problème d'installation des paquets NPM
+Si vous rencontrez des erreurs lors de l'installation des dépendances, assurez-vous que votre version de Node.js est compatible (v18+) et essayez ces commandes :
+
+```bash
+# Nettoyer le cache npm
+npm cache clean --force
+
+# Essayer à nouveau l'installation
+npm install
+```
+
+### Erreur de connexion MongoDB
+Si MongoDB ne se connecte pas :
+1. Vérifiez que MongoDB est en cours d'exécution sur votre système
+2. Vérifiez l'URL de connexion dans le fichier `.env`
+3. Assurez-vous qu'aucun pare-feu ne bloque le port de MongoDB
+
+### Erreurs au démarrage du frontend
+Si le frontend ne démarre pas correctement :
+1. Vérifiez que le backend est en cours d'exécution
+2. Assurez-vous que la configuration proxy dans `frontend/package.json` correspond au port du backend
+3. Essayez avec une installation propre : `rm -rf node_modules && npm install`
 
 ## Roadmap
 
