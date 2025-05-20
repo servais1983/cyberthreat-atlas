@@ -1,0 +1,1 @@
+Cette capture d'écran montre la carte mondiale des menaces cyber avec des points représentant les attaques récentes, colorés selon leur niveau de sévérité. Les utilisateurs peuvent zoomer, filtrer par pays ou par type d'attaque, et cliquer sur les points pour voir les détails des incidents.
