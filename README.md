@@ -1,6 +1,5 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/servais1983/cyberthreat-atlas/main/frontend/src/assets/images/cyberthreat-atlas-logo.png" alt="CyberThreat Atlas Logo" width="250"/>
-</p>
+![image](https://github.com/user-attachments/assets/9f4b561f-d37b-42fa-8541-a643a037e93e)
+
 
 <h1 align="center">CyberThreat Atlas</h1>
 
