@@ -145,43 +145,10 @@ Le script effectuera automatiquement :
 - La création du fichier .env à partir du modèle
 - Le démarrage optionnel de l'application
 
-### Installation Manuelle
-
-#### Prérequis
+### Prérequis
 - Node.js (v18 ou supérieur)
 - MongoDB (v5 ou supérieur)
 - npm ou yarn
-
-#### Installation du Backend
-```bash
-# Cloner le dépôt
-git clone https://github.com/servais1983/cyberthreat-atlas.git
-cd cyberthreat-atlas
-
-# Installer les dépendances backend
-cd backend
-npm install
-
-# Configurer les variables d'environnement
-cp .env.example .env
-# Modifiez le fichier .env selon votre environnement
-
-# Initialiser la base de données avec des données de démonstration (optionnel)
-npm run seed
-
-# Lancer le serveur de développement
-npm run dev
-```
-
-#### Installation du Frontend
-```bash
-# Dans un nouveau terminal, depuis la racine du projet
-cd frontend
-npm install
-
-# Lancer l'application React
-npm start
-```
 
 L'application sera accessible à l'adresse [http://localhost:3000](http://localhost:3000).
 
@@ -229,22 +196,7 @@ L'application dispose d'un système complet d'authentification :
 
 ## Déploiement
 
-### Préparation pour la Production
-
-```bash
-# Construire le frontend pour la production
-cd frontend
-npm run build
-
-# Configurer le backend pour la production
-cd ../backend
-# Modifier .env pour l'environnement de production
-# NODE_ENV=production
-```
-
-### Options de Déploiement
-
-#### Docker Compose
+### Docker Compose
 
 Un fichier docker-compose.yml est fourni pour faciliter le déploiement :
 
@@ -253,7 +205,7 @@ Un fichier docker-compose.yml est fourni pour faciliter le déploiement :
 docker-compose up -d
 ```
 
-#### Déploiement Cloud
+### Déploiement Cloud
 
 Instructions pour AWS :
 
@@ -265,11 +217,9 @@ Instructions pour AWS :
 ./scripts/deploy-aws.sh
 ```
 
-#### Déploiement Manuel
+### Déploiement Manuel avec PM2
 
-1. Configurer un serveur avec Node.js et MongoDB
-2. Configurer NGINX comme proxy inverse
-3. Utiliser PM2 pour gérer les processus Node.js :
+Pour un déploiement en production avec gestion des processus Node.js :
 
 ```bash
 npm install -g pm2
