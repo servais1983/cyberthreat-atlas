@@ -1,5 +1,33 @@
 ![image](https://github.com/user-attachments/assets/6f9948e3-ac11-4a52-a940-d8408bdf7ac1)
 
+<!-- Badges professionnels -->
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+  <img src="https://img.shields.io/badge/threat-intelligence-red.svg" alt="Threat Intelligence">
+  <img src="https://img.shields.io/badge/platform-web%20%7C%20docker-lightgrey.svg" alt="Platform">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/MITRE-ATT%26CK%20Framework-orange.svg" alt="MITRE ATT&CK">
+  <img src="https://img.shields.io/badge/Node.js-18%2B-brightgreen.svg" alt="Node.js">
+  <img src="https://img.shields.io/badge/React-18-blue.svg" alt="React">
+  <img src="https://img.shields.io/badge/MongoDB-5%2B-green.svg" alt="MongoDB">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/OSINT-enabled-blueviolet.svg" alt="OSINT">
+  <img src="https://img.shields.io/badge/threat-hunting-enabled-darkred.svg" alt="Threat Hunting">
+  <img src="https://img.shields.io/badge/geolocation-mapping-success.svg" alt="Geolocation">
+  <img src="https://img.shields.io/badge/real--time-analysis-critical.svg" alt="Real-time">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/maintained-yes-green.svg" alt="Maintenance">
+  <img src="https://img.shields.io/badge/last%20update-mai%202025-brightgreen.svg" alt="Last Update">
+  <img src="https://img.shields.io/badge/contributors-welcome-brightgreen.svg" alt="Contributors">
+  <img src="https://img.shields.io/badge/docs-comprehensive-blue.svg" alt="Documentation">
+</p>
 
 # CyberThreat Atlas
 
