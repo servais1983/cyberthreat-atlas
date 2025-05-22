@@ -17,7 +17,6 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/OSINT-enabled-blueviolet.svg" alt="OSINT">
-  <img src="https://img.shields.io/badge/threat-hunting-enabled-darkred.svg" alt="Threat Hunting">
   <img src="https://img.shields.io/badge/geolocation-mapping-success.svg" alt="Geolocation">
   <img src="https://img.shields.io/badge/real--time-analysis-critical.svg" alt="Real-time">
 </p>
@@ -29,39 +28,39 @@
   <img src="https://img.shields.io/badge/docs-comprehensive-blue.svg" alt="Documentation">
 </p>
 
-# CyberThreat Atlas
+# 🛡️ CyberThreat Atlas
 
 Un atlas professionnel des cybermenaces pour les analystes en sécurité, offrant une visualisation avancée et une analyse des menaces cyber à l'échelle mondiale.
 
-## Fonctionnalités Principales
+## ⚡ Fonctionnalités Principales
 
-### Cartographie Interactive
-- Visualisation mondiale des menaces avec géolocalisation précise
-- Représentation des flux d'attaques (origine → destination)
-- Filtrage par type de menace, secteur, intensité
-- Modes de visualisation multiples (marqueurs, carte de chaleur, flux)
+### 🗺️ Cartographie Interactive
+- 🌍 Visualisation mondiale des menaces avec géolocalisation précise
+- 🔄 Représentation des flux d'attaques (origine → destination)
+- 🔍 Filtrage par type de menace, secteur, intensité
+- 📊 Modes de visualisation multiples (marqueurs, carte de chaleur, flux)
 
-### Analyse des Acteurs Malveillants
-- Profils détaillés des groupes d'attaque
-- Techniques et tactiques utilisées (MITRE ATT&CK)
-- Historique des campagnes et évolution des méthodes
-- Graphe de relations entre acteurs et techniques
+### 🎯 Analyse des Acteurs Malveillants
+- 👥 Profils détaillés des groupes d'attaque
+- 🛠️ Techniques et tactiques utilisées (MITRE ATT&CK)
+- 📜 Historique des campagnes et évolution des méthodes
+- 🕸️ Graphe de relations entre acteurs et techniques
 
-### Timeline des Campagnes
-- Chronologie interactive des campagnes d'attaque
-- Corrélation temporelle entre événements
-- Filtrage par période et type d'événement
-- Analyse des tendances et patterns
+### ⏰ Timeline des Campagnes
+- 📅 Chronologie interactive des campagnes d'attaque
+- 🔗 Corrélation temporelle entre événements
+- 🎛️ Filtrage par période et type d'événement
+- 📈 Analyse des tendances et patterns
 
-### Dashboards Analytiques
-- Métriques clés et indicateurs de sécurité
-- Visualisations synthétiques (graphiques, jauges, compteurs)
-- Personnalisation des vues selon les besoins utilisateur
-- Export des rapports en PDF/CSV
+### 📊 Dashboards Analytiques
+- 📋 Métriques clés et indicateurs de sécurité
+- 📈 Visualisations synthétiques (graphiques, jauges, compteurs)
+- ⚙️ Personnalisation des vues selon les besoins utilisateur
+- 📄 Export des rapports en PDF/CSV
 
-## Architecture
+## 🏗️ Architecture
 
-### Backend
+### 🔧 Backend
 - **Node.js & Express** - Serveur API RESTful
 - **MongoDB & Mongoose** - Base de données et ODM
 - **JWT** - Authentification par token
@@ -69,7 +68,7 @@ Un atlas professionnel des cybermenaces pour les analystes en sécurité, offran
 - **Winston** - Journalisation
 - **Node-cron** - Tâches planifiées
 
-### Frontend
+### 🎨 Frontend
 - **React** - Bibliothèque UI
 - **React Router** - Navigation
 - **Axios** - Client HTTP
@@ -78,29 +77,29 @@ Un atlas professionnel des cybermenaces pour les analystes en sécurité, offran
 - **Recharts** - Graphiques et diagrammes
 - **date-fns** - Manipulation de dates
 
-### DevOps & Qualité
+### 🚀 DevOps & Qualité
 - **ESLint & Prettier** - Qualité du code
 - **Jest** - Tests unitaires
 - **Supertest** - Tests d'API
 - **Docker** - Conteneurisation
 - **GitHub Actions** - CI/CD
 
-## Installation
+## 📦 Installation
 
-### Prérequis
+### 📋 Prérequis
 - Node.js (v18+)
 - MongoDB (v5+)
 - Docker et Docker Compose (optionnel)
 
-### Installation Locale
+### 💻 Installation Locale
 
-1. Cloner le dépôt
+1. **📥 Cloner le dépôt**
 ```bash
 git clone https://github.com/servais1983/cyberthreat-atlas.git
 cd cyberthreat-atlas
 ```
 
-2. Installer les dépendances
+2. **📚 Installer les dépendances**
 ```bash
 # Backend
 cd backend
@@ -111,7 +110,7 @@ cd ../frontend
 npm install
 ```
 
-3. Configurer l'environnement
+3. **⚙️ Configurer l'environnement**
 ```bash
 # Copier et éditer le fichier d'environnement
 cd ../backend
@@ -119,7 +118,7 @@ cp .env.example .env
 # Éditer le fichier .env avec vos paramètres (URL MongoDB, port, etc.)
 ```
 
-4. Démarrer l'application
+4. **🚀 Démarrer l'application**
 ```bash
 # Démarrer le backend
 cd backend
@@ -132,7 +131,7 @@ npm start
 
 L'application sera accessible à l'adresse http://localhost:3000 par défaut.
 
-### Déploiement avec Docker
+### 🐳 Déploiement avec Docker
 
 Un fichier docker-compose.yml est fourni pour faciliter le déploiement :
 ```bash
@@ -142,18 +141,18 @@ docker-compose up -d
 
 L'application sera accessible à l'adresse http://localhost:8080 par défaut.
 
-## Documentation
+## 📖 Documentation
 
 La documentation complète est disponible dans le dossier `docs/` :
 
-- [Conception détaillée](docs/conception_atlas_cybermenaces.md) - Architecture et design du projet
-- [Validation professionnelle](docs/validation_professionnelle.md) - Conformité aux standards professionnels
+- 📋 [Conception détaillée](docs/conception_atlas_cybermenaces.md) - Architecture et design du projet
+- ✅ [Validation professionnelle](docs/validation_professionnelle.md) - Conformité aux standards professionnels
 
-## API Documentation
+## 🔌 API Documentation
 
 L'API REST est documentée avec Swagger et accessible à l'adresse `/api/docs` lorsque le serveur est en cours d'exécution.
 
-### Points d'Entrée Principaux
+### 📡 Points d'Entrée Principaux
 | Méthode | Point d'entrée | Description |
 |---------|---------------|-------------|
 | GET | `/api/v1/attack-groups` | Liste des groupes d'attaque |
@@ -165,35 +164,35 @@ L'API REST est documentée avec Swagger et accessible à l'adresse `/api/docs` l
 | POST | `/api/v1/auth/register` | Inscription d'un utilisateur |
 | POST | `/api/v1/auth/login` | Connexion utilisateur |
 
-## Captures d'Écran
+## 📸 Captures d'Écran
 
 <p align="center">
   <img src="docs/screenshots/dashboard-map.png" alt="Dashboard Map" width="800"/>
-  <em>Carte mondiale des menaces</em>
+  <em>🌍 Carte mondiale des menaces</em>
 </p>
 
 <p align="center">
   <img src="docs/screenshots/relationship-graph.png" alt="Relationship Graph" width="800"/>
-  <em>Graphe de relations entre acteurs et techniques</em>
+  <em>🕸️ Graphe de relations entre acteurs et techniques</em>
 </p>
 
 <p align="center">
   <img src="docs/screenshots/campaign-timeline.png" alt="Campaign Timeline" width="800"/>
-  <em>Timeline des campagnes d'attaque</em>
+  <em>⏰ Timeline des campagnes d'attaque</em>
 </p>
 
-## Guide de Démarrage Rapide
+## 🚀 Guide de Démarrage Rapide
 
-1. **Connexion** - Utilisez les identifiants par défaut (admin/admin) ou créez un nouveau compte
-2. **Dashboard** - Visualisez les menaces actives et les statistiques globales
-3. **Carte des Menaces** - Explorez la carte interactive avec différents modes d'affichage
-4. **Groupes d'Attaque** - Consultez les profils détaillés des acteurs malveillants
-5. **Timeline** - Analysez la chronologie des campagnes d'attaque
-6. **Rapports** - Générez des rapports personnalisés sur les menaces
+1. **🔐 Connexion** - Utilisez les identifiants par défaut (admin/admin) ou créez un nouveau compte
+2. **📊 Dashboard** - Visualisez les menaces actives et les statistiques globales
+3. **🗺️ Carte des Menaces** - Explorez la carte interactive avec différents modes d'affichage
+4. **👥 Groupes d'Attaque** - Consultez les profils détaillés des acteurs malveillants
+5. **⏰ Timeline** - Analysez la chronologie des campagnes d'attaque
+6. **📄 Rapports** - Générez des rapports personnalisés sur les menaces
 
-## FAQ et Support
+## ❓ FAQ et Support
 
-### Questions Fréquentes
+### 💬 Questions Fréquentes
 
 **Q: Comment ajouter de nouvelles données de menaces ?**  
 R: Utilisez l'interface d'administration accessible via le menu "Admin" ou importez des données via l'API.
@@ -204,14 +203,14 @@ R: Une fois les données chargées, la plupart des fonctionnalités sont disponi
 **Q: Comment personnaliser les filtres de la carte ?**  
 R: Utilisez le panneau de filtres à gauche de la carte pour sélectionner les critères (sévérité, type, période, etc.).
 
-### Support
+### 🆘 Support
 
 Pour toute question ou assistance technique :
-- Ouvrez une issue sur GitHub
-- Consultez la documentation détaillée dans le dossier `docs/`
-- Contactez l'équipe de développement via l'adresse indiquée dans le profil GitHub
+- 🐛 Ouvrez une issue sur GitHub
+- 📖 Consultez la documentation détaillée dans le dossier `docs/`
+- 📧 Contactez l'équipe de développement via l'adresse indiquée dans le profil GitHub
 
-## Licence
+## 📄 Licence
 
 Ce projet est distribué sous licence MIT. Voir le fichier `LICENSE` pour plus d'informations.
 
