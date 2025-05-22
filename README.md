@@ -85,7 +85,7 @@ npm install
 # Copier et éditer le fichier d'environnement
 cd ../backend
 cp .env.example .env
-# Éditer le fichier .env avec vos paramètres
+# Éditer le fichier .env avec vos paramètres (URL MongoDB, port, etc.)
 ```
 
 4. Démarrer l'application
@@ -99,6 +99,8 @@ cd frontend
 npm start
 ```
 
+L'application sera accessible à l'adresse http://localhost:3000 par défaut.
+
 ### Déploiement avec Docker
 
 Un fichier docker-compose.yml est fourni pour faciliter le déploiement :
@@ -107,14 +109,14 @@ Un fichier docker-compose.yml est fourni pour faciliter le déploiement :
 docker-compose up -d
 ```
 
+L'application sera accessible à l'adresse http://localhost:8080 par défaut.
+
 ## Documentation
 
 La documentation complète est disponible dans le dossier `docs/` :
 
-- [Conception détaillée](docs/conception_atlas_cybermenaces.md)
-- [Validation professionnelle](docs/validation_professionnelle.md)
-- [Guide d'utilisation](docs/guide_utilisation.md)
-- [API Reference](docs/api_reference.md)
+- [Conception détaillée](docs/conception_atlas_cybermenaces.md) - Architecture et design du projet
+- [Validation professionnelle](docs/validation_professionnelle.md) - Conformité aux standards professionnels
 
 ## API Documentation
 
@@ -148,6 +150,35 @@ L'API REST est documentée avec Swagger et accessible à l'adresse `/api/docs` l
   <img src="docs/screenshots/campaign-timeline.png" alt="Campaign Timeline" width="800"/>
   <em>Timeline des campagnes d'attaque</em>
 </p>
+
+## Guide de Démarrage Rapide
+
+1. **Connexion** - Utilisez les identifiants par défaut (admin/admin) ou créez un nouveau compte
+2. **Dashboard** - Visualisez les menaces actives et les statistiques globales
+3. **Carte des Menaces** - Explorez la carte interactive avec différents modes d'affichage
+4. **Groupes d'Attaque** - Consultez les profils détaillés des acteurs malveillants
+5. **Timeline** - Analysez la chronologie des campagnes d'attaque
+6. **Rapports** - Générez des rapports personnalisés sur les menaces
+
+## FAQ et Support
+
+### Questions Fréquentes
+
+**Q: Comment ajouter de nouvelles données de menaces ?**  
+R: Utilisez l'interface d'administration accessible via le menu "Admin" ou importez des données via l'API.
+
+**Q: L'application fonctionne-t-elle hors ligne ?**  
+R: Une fois les données chargées, la plupart des fonctionnalités sont disponibles hors ligne, mais les mises à jour en temps réel nécessitent une connexion.
+
+**Q: Comment personnaliser les filtres de la carte ?**  
+R: Utilisez le panneau de filtres à gauche de la carte pour sélectionner les critères (sévérité, type, période, etc.).
+
+### Support
+
+Pour toute question ou assistance technique :
+- Ouvrez une issue sur GitHub
+- Consultez la documentation détaillée dans le dossier `docs/`
+- Contactez l'équipe de développement via l'adresse indiquée dans le profil GitHub
 
 ## Licence
 
