@@ -4,11 +4,12 @@ FROM node:18-alpine
 # Créer le répertoire de l'application
 WORKDIR /app
 
-# Copier les fichiers package.json et package-lock.json
-COPY package*.json ./
+# Copier package.json
+COPY package.json ./
 
 # Installer les dépendances
-RUN npm ci --only=production
+# Utiliser npm install au lieu de npm ci pour éviter l'erreur si package-lock.json n'existe pas
+RUN npm install --only=production
 
 # Copier le code source
 COPY . .
