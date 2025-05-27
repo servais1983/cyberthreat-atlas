@@ -89,9 +89,50 @@ Un atlas professionnel des cybermenaces pour les analystes en sécurité, offran
 ### 📋 Prérequis
 - Node.js (v18+)
 - MongoDB (v5+)
+- Git
 - Docker et Docker Compose (optionnel)
 
-### 💻 Installation Locale
+### 🚀 Installation Rapide (Windows & Linux)
+
+#### Option 1: Installation Automatique
+
+**Windows:**
+```bash
+# Cloner le dépôt
+git clone https://github.com/servais1983/cyberthreat-atlas.git
+cd cyberthreat-atlas
+
+# Lancer l'installation automatique
+install.bat
+```
+
+**Linux/macOS:**
+```bash
+# Cloner le dépôt
+git clone https://github.com/servais1983/cyberthreat-atlas.git
+cd cyberthreat-atlas
+
+# Rendre le script exécutable et lancer l'installation
+chmod +x install.sh
+./install.sh
+```
+
+#### Option 2: Installation avec Docker Compose
+
+```bash
+# Cloner le dépôt
+git clone https://github.com/servais1983/cyberthreat-atlas.git
+cd cyberthreat-atlas
+
+# Lancer avec Docker Compose
+docker-compose up -d
+```
+
+L'application sera accessible à :
+- Frontend : http://localhost:3000
+- Backend API : http://localhost:5000
+
+### 💻 Installation Manuelle
 
 1. **📥 Cloner le dépôt**
 ```bash
@@ -99,47 +140,95 @@ git clone https://github.com/servais1983/cyberthreat-atlas.git
 cd cyberthreat-atlas
 ```
 
-2. **📚 Installer les dépendances**
+2. **📚 Installer les dépendances Backend**
 ```bash
-# Backend
 cd backend
 npm install
+```
 
-# Frontend
+3. **⚙️ Configurer l'environnement Backend**
+```bash
+# Créer le fichier .env
+cp .env.example .env
+
+# Éditer le fichier .env avec vos paramètres
+# Exemple de configuration :
+# PORT=5000
+# MONGODB_URI=mongodb://localhost:27017/cyberthreat-atlas
+# JWT_SECRET=votre_secret_jwt_securise
+```
+
+4. **📚 Installer les dépendances Frontend**
+```bash
 cd ../frontend
 npm install
 ```
 
-3. **⚙️ Configurer l'environnement**
-```bash
-# Copier et éditer le fichier d'environnement
-cd ../backend
-cp .env.example .env
-# Éditer le fichier .env avec vos paramètres (URL MongoDB, port, etc.)
-```
+5. **🚀 Démarrer l'application**
 
-4. **🚀 Démarrer l'application**
+**Méthode 1 - Terminaux séparés:**
 ```bash
-# Démarrer le backend
+# Terminal 1 - Backend
 cd backend
 npm start
 
-# Dans un autre terminal, démarrer le frontend
+# Terminal 2 - Frontend
 cd frontend
 npm start
 ```
 
-L'application sera accessible à l'adresse http://localhost:3000 par défaut.
+**Méthode 2 - Concurrently (recommandé):**
+```bash
+# Depuis la racine du projet, après avoir installé concurrently
+npm install -g concurrently
+
+# Démarrer les deux services
+cd backend
+npm run dev
+```
 
 ### 🐳 Déploiement avec Docker
 
-Un fichier docker-compose.yml est fourni pour faciliter le déploiement :
+1. **Build et démarrage des conteneurs**
 ```bash
 # Depuis la racine du projet
+docker-compose build
 docker-compose up -d
 ```
 
-L'application sera accessible à l'adresse http://localhost:8080 par défaut.
+2. **Vérifier les logs**
+```bash
+# Voir tous les logs
+docker-compose logs -f
+
+# Logs du backend uniquement
+docker-compose logs -f backend
+
+# Logs du frontend uniquement
+docker-compose logs -f frontend
+```
+
+3. **Arrêter les conteneurs**
+```bash
+docker-compose down
+
+# Pour supprimer aussi les volumes (base de données)
+docker-compose down -v
+```
+
+### 🔧 Scripts NPM Disponibles
+
+**Backend (`backend/package.json`):**
+- `npm start` - Démarre le serveur en production
+- `npm run dev` - Démarre le serveur en développement avec nodemon
+- `npm run test` - Lance les tests
+- `npm run seed` - Initialise la base de données avec des données de démonstration
+
+**Frontend (`frontend/package.json`):**
+- `npm start` - Démarre l'application React en développement
+- `npm run build` - Construit l'application pour la production
+- `npm run test` - Lance les tests
+- `npm run eject` - Éjecte la configuration Create React App (attention : irréversible)
 
 ## 📖 Documentation
 
@@ -150,7 +239,7 @@ La documentation complète est disponible dans le dossier `docs/` :
 
 ## 🔌 API Documentation
 
-L'API REST est documentée avec Swagger et accessible à l'adresse `/api/docs` lorsque le serveur est en cours d'exécution.
+L'API REST est documentée avec Swagger et accessible à l'adresse `/api-docs` lorsque le serveur backend est en cours d'exécution.
 
 ### 📡 Points d'Entrée Principaux
 | Méthode | Point d'entrée | Description |
@@ -164,26 +253,29 @@ L'API REST est documentée avec Swagger et accessible à l'adresse `/api/docs` l
 | POST | `/api/v1/auth/register` | Inscription d'un utilisateur |
 | POST | `/api/v1/auth/login` | Connexion utilisateur |
 
-## 📸 Captures d'Écran
+## 🐛 Dépannage
 
-<p align="center">
-  <img src="docs/screenshots/dashboard-map.png" alt="Dashboard Map" width="800"/>
-  <em>🌍 Carte mondiale des menaces</em>
-</p>
+### Problèmes Courants
 
-<p align="center">
-  <img src="docs/screenshots/relationship-graph.png" alt="Relationship Graph" width="800"/>
-  <em>🕸️ Graphe de relations entre acteurs et techniques</em>
-</p>
+**Erreur de connexion MongoDB:**
+- Vérifiez que MongoDB est installé et démarré
+- Vérifiez l'URL de connexion dans le fichier `.env`
 
-<p align="center">
-  <img src="docs/screenshots/campaign-timeline.png" alt="Campaign Timeline" width="800"/>
-  <em>⏰ Timeline des campagnes d'attaque</em>
-</p>
+**Port déjà utilisé:**
+- Changez les ports dans les fichiers `.env` ou `docker-compose.yml`
+- Arrêtez les services qui utilisent les ports 3000 ou 5000
+
+**Erreur npm install:**
+- Supprimez `node_modules` et `package-lock.json`, puis réessayez
+- Assurez-vous d'utiliser Node.js v18+
+
+**Erreur Docker:**
+- Vérifiez que Docker Desktop est démarré
+- Nettoyez les images : `docker system prune -a`
 
 ## 🚀 Guide de Démarrage Rapide
 
-1. **🔐 Connexion** - Utilisez les identifiants par défaut (admin/admin) ou créez un nouveau compte
+1. **🔐 Connexion** - Utilisez les identifiants par défaut (admin/admin123) ou créez un nouveau compte
 2. **📊 Dashboard** - Visualisez les menaces actives et les statistiques globales
 3. **🗺️ Carte des Menaces** - Explorez la carte interactive avec différents modes d'affichage
 4. **👥 Groupes d'Attaque** - Consultez les profils détaillés des acteurs malveillants
