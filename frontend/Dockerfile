@@ -4,11 +4,12 @@ FROM node:18-alpine
 # Créer le répertoire de l'application
 WORKDIR /app
 
-# Copier les fichiers package.json et package-lock.json
-COPY package*.json ./
+# Copier package.json
+COPY package.json ./
 
 # Installer les dépendances
-RUN npm ci --silent
+# Utiliser npm install au lieu de npm ci pour éviter l'erreur si package-lock.json n'existe pas
+RUN npm install --silent
 
 # Copier le code source
 COPY . .
@@ -30,7 +31,7 @@ ENV GENERATE_SOURCEMAP=false
 
 # Commande de santé
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000 || exit 1
+  CMD wget --quiet --tries=1 --spider http://localhost:3000 || exit 1
 
 # Démarrer l'application
 CMD ["npm", "start"]
