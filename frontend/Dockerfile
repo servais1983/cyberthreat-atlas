@@ -1,5 +1,8 @@
 # Frontend Dockerfile pour CyberThreat Atlas
-FROM node:18-alpine
+FROM node:18-alpine AS builder
+
+# Installer les outils nécessaires pour la compilation
+RUN apk add --no-cache python3 make g++
 
 # Créer le répertoire de l'application
 WORKDIR /app
@@ -7,16 +10,35 @@ WORKDIR /app
 # Copier package.json
 COPY package.json ./
 
-# Installer les dépendances
-# Utiliser npm install au lieu de npm ci pour éviter l'erreur si package-lock.json n'existe pas
-RUN npm install --silent
+# Générer package-lock.json si nécessaire et installer les dépendances
+RUN if [ -f package-lock.json ]; then \
+      npm ci; \
+    else \
+      npm install && \
+      npm install --package-lock-only; \
+    fi
 
 # Copier le code source
 COPY . .
 
+# Build l'application React
+RUN npm run build
+
+# Stage de production
+FROM node:18-alpine
+
+# Installer serve pour servir l'application
+RUN npm install -g serve
+
+# Créer le répertoire de l'application
+WORKDIR /app
+
+# Copier les fichiers buildés depuis le stage builder
+COPY --from=builder /app/build ./build
+
 # Créer un utilisateur non-root pour la sécurité
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodejs -u 1001
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
 
 # Changer les permissions du répertoire
 RUN chown -R nodejs:nodejs /app
@@ -33,5 +55,5 @@ ENV GENERATE_SOURCEMAP=false
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD wget --quiet --tries=1 --spider http://localhost:3000 || exit 1
 
-# Démarrer l'application
-CMD ["npm", "start"]
+# Démarrer l'application avec serve
+CMD ["serve", "-s", "build", "-l", "3000"]
