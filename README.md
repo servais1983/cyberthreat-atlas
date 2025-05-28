@@ -1,24 +1,23 @@
-![image](https://github.com/user-attachments/assets/e965d9ad-2c1d-4c84-a082-b09e335149b6)
+![image](https://github.com/user-attachments/files/14676359/cyberthreat-atlas-logo.png)
 
+# CyberThreat Atlas
 
-# 🌐 CyberThreat Atlas
-
-Une plateforme complète de cartographie et d'analyse des menaces cyber mondiales, permettant de visualiser, suivre et comprendre les acteurs malveillants, leurs techniques et leurs campagnes d'attaque.
+Une plateforme complète de visualisation et d'analyse des menaces cyber, permettant de suivre les groupes d'attaque, les campagnes, les techniques et les indicateurs de compromission.
 
 ## 🔍 Fonctionnalités
 
-- **🗺️ Carte Interactive** - Visualisation géographique des menaces et attaques
-- **👥 Profils d'Acteurs** - Base de données détaillée des groupes APT et acteurs malveillants
-- **⚔️ Techniques & Tactiques** - Mapping avec le framework MITRE ATT&CK
-- **⏱️ Timeline** - Chronologie interactive des campagnes d'attaque
-- **📊 Tableaux de Bord** - Statistiques et métriques sur les menaces actuelles
-- **🔍 Recherche Avancée** - Filtrage multicritères des données de menaces
-- **📱 Responsive Design** - Interface adaptée à tous les appareils
+- **🌐 Cartographie des menaces** - Visualisation géographique des activités malveillantes
+- **👥 Profils de groupes d'attaque** - Informations détaillées sur les APTs et leurs tactiques
+- **⏱️ Timeline des campagnes** - Chronologie interactive des campagnes d'attaque
+- **🔗 Analyse des relations** - Visualisation des liens entre acteurs, techniques et campagnes
+- **📊 Tableaux de bord** - Statistiques et métriques sur les menaces actuelles
+- **🔍 Recherche avancée** - Filtrage multicritères des données de menaces
+- **📱 Interface responsive** - Expérience optimisée sur tous les appareils
 
 ## 🛠️ Technologies
 
-- **React** - Frontend
-- **Node.js & Express** - Backend API
+- **React** - Interface utilisateur
+- **Node.js/Express** - Backend API
 - **MongoDB** - Base de données
 - **JWT** - Authentification
 - **Leaflet** - Cartographie interactive
@@ -52,7 +51,7 @@ docker-compose up -d
 ```
 
 L'application sera accessible à :
-- Frontend : http://localhost:3000
+- Frontend : http://localhost:3001
 - Backend API : http://localhost:5000
 - API Documentation : http://localhost:5000/api-docs
 
@@ -104,7 +103,7 @@ L'API REST est documentée avec Swagger et accessible à l'adresse `/api-docs` l
 
 **Port déjà utilisé:**
 - Changez les ports dans le fichier `docker-compose.yml`
-- Arrêtez les services qui utilisent les ports 3000 ou 5000
+- Arrêtez les services qui utilisent les ports 3001 ou 5000
 
 **Erreur Docker:**
 - Vérifiez que Docker Desktop est démarré
