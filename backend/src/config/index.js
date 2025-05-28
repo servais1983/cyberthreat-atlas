@@ -1,1 +1,78 @@
-/**\n * Configuration principale de l'application\n * Ce fichier centralise toutes les variables de configuration\n */\n\nrequire('dotenv').config(); // Charger les variables d'environnement depuis .env\n\nmodule.exports = {\n  // Environnement d'exécution\n  env: process.env.NODE_ENV || 'development',\n  \n  // Configuration du serveur\n  server: {\n    port: process.env.PORT || 5000,\n    host: process.env.HOST || 'localhost'\n  },\n  \n  // Configuration de la base de données\n  mongoURI: process.env.MONGO_URI || 'mongodb://localhost:27017/cyberthreat-atlas',\n  \n  // Configuration de sécurité\n  security: {\n    jwtSecret: process.env.JWT_SECRET || 'cyberthreat-atlas-secret-key',\n    jwtExpiresIn: process.env.JWT_EXPIRES_IN || '24h',\n    bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS || '10', 10),\n    rateLimitWindow: 15 * 60 * 1000, // 15 minutes\n    rateLimitMax: 100 // 100 requêtes max par fenêtre\n  },\n  \n  // Configuration des API externes\n  externalApis: {\n    mitre: {\n      baseUrl: 'https://attack.mitre.org/api/'\n    },\n    virusTotal: {\n      baseUrl: 'https://www.virustotal.com/api/v3/',\n      apiKey: process.env.VIRUSTOTAL_API_KEY\n    },\n    shodan: {\n      baseUrl: 'https://api.shodan.io/',\n      apiKey: process.env.SHODAN_API_KEY\n    },\n    alienvault: {\n      baseUrl: 'https://otx.alienvault.com/api/v1/',\n      apiKey: process.env.ALIENVAULT_API_KEY\n    },\n    cve: {\n      baseUrl: 'https://services.nvd.nist.gov/rest/json/cves/2.0/'\n    }\n  },\n  \n  // Configuration de logging\n  logging: {\n    level: process.env.LOG_LEVEL || 'info', // debug, info, warn, error\n    format: process.env.LOG_FORMAT || 'combined' // common, combined, dev, short, tiny\n  },\n  \n  // Limites et pagination\n  limits: {\n    paginationDefaultLimit: 20,\n    paginationMaxLimit: 100,\n    maxSearchResults: 100,\n    maxFileSize: 10 * 1024 * 1024 // 10 MB\n  },\n  \n  // Configuration du CORS\n  cors: {\n    origin: process.env.CORS_ORIGIN || '*',\n    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],\n    allowedHeaders: ['Content-Type', 'Authorization']\n  },\n  \n  // Configuration des tâches planifiées (cron jobs)\n  scheduledTasks: {\n    updateMitreMatrix: process.env.UPDATE_MITRE_CRON || '0 0 * * *', // Tous les jours à minuit\n    fetchThreatIntel: process.env.FETCH_THREAT_INTEL_CRON || '0 */6 * * *' // Toutes les 6 heures\n  }\n};
+/**
+ * Configuration principale de l'application
+ * Ce fichier centralise toutes les variables de configuration
+ */
+
+require('dotenv').config(); // Charger les variables d'environnement depuis .env
+
+module.exports = {
+  // Environnement d'exécution
+  env: process.env.NODE_ENV || 'development',
+  
+  // Configuration du serveur
+  server: {
+    port: process.env.PORT || 5000,
+    host: process.env.HOST || 'localhost'
+  },
+  
+  // Configuration de la base de données
+  mongoURI: process.env.MONGO_URI || 'mongodb://localhost:27017/cyberthreat-atlas',
+  
+  // Configuration de sécurité
+  security: {
+    jwtSecret: process.env.JWT_SECRET || 'cyberthreat-atlas-secret-key',
+    jwtExpiresIn: process.env.JWT_EXPIRES_IN || '24h',
+    bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS || '10', 10),
+    rateLimitWindow: 15 * 60 * 1000, // 15 minutes
+    rateLimitMax: 100 // 100 requêtes max par fenêtre
+  },
+  
+  // Configuration des API externes
+  externalApis: {
+    mitre: {
+      baseUrl: 'https://attack.mitre.org/api/'
+    },
+    virusTotal: {
+      baseUrl: 'https://www.virustotal.com/api/v3/',
+      apiKey: process.env.VIRUSTOTAL_API_KEY
+    },
+    shodan: {
+      baseUrl: 'https://api.shodan.io/',
+      apiKey: process.env.SHODAN_API_KEY
+    },
+    alienvault: {
+      baseUrl: 'https://otx.alienvault.com/api/v1/',
+      apiKey: process.env.ALIENVAULT_API_KEY
+    },
+    cve: {
+      baseUrl: 'https://services.nvd.nist.gov/rest/json/cves/2.0/'
+    }
+  },
+  
+  // Configuration de logging
+  logging: {
+    level: process.env.LOG_LEVEL || 'info', // debug, info, warn, error
+    format: process.env.LOG_FORMAT || 'combined' // common, combined, dev, short, tiny
+  },
+  
+  // Limites et pagination
+  limits: {
+    paginationDefaultLimit: 20,
+    paginationMaxLimit: 100,
+    maxSearchResults: 100,
+    maxFileSize: 10 * 1024 * 1024 // 10 MB
+  },
+  
+  // Configuration du CORS
+  cors: {
+    origin: process.env.CORS_ORIGIN || '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  },
+  
+  // Configuration des tâches planifiées (cron jobs)
+  scheduledTasks: {
+    updateMitreMatrix: process.env.UPDATE_MITRE_CRON || '0 0 * * *', // Tous les jours à minuit
+    fetchThreatIntel: process.env.FETCH_THREAT_INTEL_CRON || '0 */6 * * *' // Toutes les 6 heures
+  }
+};
