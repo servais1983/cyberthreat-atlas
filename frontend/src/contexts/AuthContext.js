@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
 // Création du contexte d'authentification
-const AuthContext = createContext({
+export const AuthContext = createContext({
   user: null,
   isAuthenticated: false,
   isLoading: true,
@@ -22,7 +22,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Changé à false pour éviter les appels API
   
   // Fonction pour définir le token dans le local storage et les headers d'Axios
   const setToken = (token) => {
@@ -35,109 +35,65 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-  // Vérifier l'authentification de l'utilisateur au chargement
-  useEffect(() => {
-    const checkAuth = async () => {
-      setIsLoading(true);
-      
-      const token = localStorage.getItem('token');
-      
-      if (token) {
-        setToken(token);
-        
-        try {
-          const response = await axios.get('/api/v1/auth/me');
-          setUser(response.data.data);
-          setIsAuthenticated(true);
-        } catch (error) {
-          console.error('Authentication error:', error);
-          setToken(null);
-          setUser(null);
-          setIsAuthenticated(false);
-        }
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-      }
-      
-      setIsLoading(false);
-    };
-    
-    checkAuth();
-  }, []);
-  
-  // Fonction de connexion
+  // Fonction de connexion (simulée pour éviter les erreurs d'API)
   const login = async (email, password) => {
     setIsLoading(true);
     
     try {
-      const response = await axios.post('/api/v1/auth/login', {
-        email,
-        password
-      });
+      // Simulation d'une connexion réussie
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const { token, user } = response.data;
+      const mockUser = {
+        id: '1',
+        name: 'Utilisateur Test',
+        email: email,
+        role: 'Analyste'
+      };
       
-      setToken(token);
-      setUser(user);
+      const mockToken = 'mock-jwt-token';
+      
+      setToken(mockToken);
+      setUser(mockUser);
       setIsAuthenticated(true);
       
       setIsLoading(false);
       return { success: true };
     } catch (error) {
       setIsLoading(false);
-      
-      let message = 'An error occurred during login';
-      
-      if (error.response) {
-        message = error.response.data.message || message;
-      }
-      
       return {
         success: false,
-        message
+        message: 'Erreur lors de la connexion'
       };
     }
   };
   
-  // Fonction d'inscription
+  // Fonction d'inscription (simulée)
   const register = async (name, email, password) => {
     setIsLoading(true);
     
     try {
-      const response = await axios.post('/api/v1/auth/register', {
-        name,
-        email,
-        password
-      });
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const { token } = response.data;
+      const mockUser = {
+        id: '1',
+        name: name,
+        email: email,
+        role: 'Analyste'
+      };
       
-      setToken(token);
+      const mockToken = 'mock-jwt-token';
       
-      // Récupérer les informations de l'utilisateur après l'inscription
-      const userResponse = await axios.get('/api/v1/auth/me');
-      setUser(userResponse.data.data);
+      setToken(mockToken);
+      setUser(mockUser);
       setIsAuthenticated(true);
       
       setIsLoading(false);
       return { success: true };
     } catch (error) {
       setIsLoading(false);
-      
-      let message = 'An error occurred during registration';
-      
-      if (error.response) {
-        message = error.response.data.message || message;
-        
-        if (error.response.data.errors) {
-          message = error.response.data.errors.map(err => err.msg).join(', ');
-        }
-      }
-      
       return {
         success: false,
-        message
+        message: 'Erreur lors de l\'inscription'
       };
     }
   };
@@ -149,123 +105,88 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
   };
   
-  // Fonction pour réinitialiser le mot de passe (étape 1)
+  // Fonction pour réinitialiser le mot de passe (simulée)
   const forgotPassword = async (email) => {
     setIsLoading(true);
     
     try {
-      const response = await axios.post('/api/v1/auth/forgot-password', {
-        email
-      });
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       setIsLoading(false);
       return {
         success: true,
-        message: response.data.message
+        message: 'Email de réinitialisation envoyé'
       };
     } catch (error) {
       setIsLoading(false);
-      
-      let message = 'An error occurred during password reset request';
-      
-      if (error.response) {
-        message = error.response.data.message || message;
-      }
-      
       return {
         success: false,
-        message
+        message: 'Erreur lors de l\'envoi de l\'email'
       };
     }
   };
   
-  // Fonction pour réinitialiser le mot de passe (étape 2)
+  // Fonction pour réinitialiser le mot de passe (simulée)
   const resetPassword = async (token, password) => {
     setIsLoading(true);
     
     try {
-      const response = await axios.put(`/api/v1/auth/reset-password/${token}`, {
-        password
-      });
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       setIsLoading(false);
       return {
         success: true,
-        message: response.data.message
+        message: 'Mot de passe réinitialisé avec succès'
       };
     } catch (error) {
       setIsLoading(false);
-      
-      let message = 'An error occurred during password reset';
-      
-      if (error.response) {
-        message = error.response.data.message || message;
-      }
-      
       return {
         success: false,
-        message
+        message: 'Erreur lors de la réinitialisation'
       };
     }
   };
   
-  // Fonction pour mettre à jour le profil
+  // Fonction pour mettre à jour le profil (simulée)
   const updateProfile = async (userData) => {
     setIsLoading(true);
     
     try {
-      const response = await axios.put('/api/v1/auth/update-profile', userData);
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      setUser(response.data.data);
+      setUser({ ...user, ...userData });
       
       setIsLoading(false);
       return {
         success: true,
-        message: 'Profile updated successfully'
+        message: 'Profil mis à jour avec succès'
       };
     } catch (error) {
       setIsLoading(false);
-      
-      let message = 'An error occurred during profile update';
-      
-      if (error.response) {
-        message = error.response.data.message || message;
-      }
-      
       return {
         success: false,
-        message
+        message: 'Erreur lors de la mise à jour'
       };
     }
   };
   
-  // Fonction pour changer le mot de passe
+  // Fonction pour changer le mot de passe (simulée)
   const changePassword = async (currentPassword, newPassword) => {
     setIsLoading(true);
     
     try {
-      const response = await axios.put('/api/v1/auth/change-password', {
-        currentPassword,
-        newPassword
-      });
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       setIsLoading(false);
       return {
         success: true,
-        message: response.data.message
+        message: 'Mot de passe changé avec succès'
       };
     } catch (error) {
       setIsLoading(false);
-      
-      let message = 'An error occurred during password change';
-      
-      if (error.response) {
-        message = error.response.data.message || message;
-      }
-      
       return {
         success: false,
-        message
+        message: 'Erreur lors du changement de mot de passe'
       };
     }
   };
