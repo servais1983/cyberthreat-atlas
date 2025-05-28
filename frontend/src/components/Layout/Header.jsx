@@ -1,1 +1,98 @@
-import React, { useState } from 'react';\nimport { Link } from 'react-router-dom';\nimport './Header.css';\nimport { useTheme } from '../../contexts/ThemeContext';\n\nconst Header = ({ toggleSidebar }) => {\n  const { darkMode, toggleDarkMode } = useTheme();\n  const [showDropdown, setShowDropdown] = useState(false);\n  const [searchQuery, setSearchQuery] = useState('');\n  \n  const handleSearchSubmit = (e) => {\n    e.preventDefault();\n    // Implémentation de la recherche à faire\n    console.log('Searching for:', searchQuery);\n  };\n  \n  return (\n    <header className=\"app-header\">\n      <div className=\"header-left\">\n        <button className=\"sidebar-toggle\" onClick={toggleSidebar}>\n          <i className=\"fas fa-bars\"></i>\n        </button>\n        \n        <Link to=\"/\" className=\"app-logo\">\n          <span className=\"logo-icon\">🛡️</span>\n          <span className=\"logo-text\">CyberThreat Atlas</span>\n        </Link>\n      </div>\n      \n      <div className=\"header-center\">\n        <form className=\"search-form\" onSubmit={handleSearchSubmit}>\n          <input\n            type=\"text\"\n            placeholder=\"Rechercher des groupes, techniques, campagnes...\"\n            value={searchQuery}\n            onChange={(e) => setSearchQuery(e.target.value)}\n          />\n          <button type=\"submit\">\n            <i className=\"fas fa-search\"></i>\n          </button>\n        </form>\n      </div>\n      \n      <div className=\"header-right\">\n        <button className=\"theme-toggle\" onClick={toggleDarkMode}>\n          {darkMode ? (\n            <i className=\"fas fa-sun\"></i>\n          ) : (\n            <i className=\"fas fa-moon\"></i>\n          )}\n        </button>\n        \n        <button className=\"notification-btn\">\n          <i className=\"fas fa-bell\"></i>\n          <span className=\"notification-badge\">5</span>\n        </button>\n        \n        <div className=\"user-dropdown\">\n          <button \n            className=\"user-btn\" \n            onClick={() => setShowDropdown(!showDropdown)}\n          >\n            <img \n              src=\"/assets/images/user-avatar.png\" \n              alt=\"User\" \n              className=\"user-avatar\" \n              onError={(e) => {\n                e.target.onerror = null;\n                e.target.src = 'https://ui-avatars.com/api/?name=User&background=0056b3&color=fff';\n              }}\n            />\n            <span className=\"user-name\">Analyste</span>\n            <i className={`fas fa-chevron-${showDropdown ? 'up' : 'down'}`}></i>\n          </button>\n          \n          {showDropdown && (\n            <div className=\"dropdown-menu\">\n              <Link to=\"/profile\" className=\"dropdown-item\">\n                <i className=\"fas fa-user\"></i> Profil\n              </Link>\n              <Link to=\"/settings\" className=\"dropdown-item\">\n                <i className=\"fas fa-cog\"></i> Paramètres\n              </Link>\n              <div className=\"dropdown-divider\"></div>\n              <button className=\"dropdown-item\">\n                <i className=\"fas fa-sign-out-alt\"></i> Déconnexion\n              </button>\n            </div>\n          )}\n        </div>\n      </div>\n    </header>\n  );\n};\n\nexport default Header;
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
+import { ThemeContext } from '../../contexts/ThemeContext';
+import './Header.css';
+
+const Header = ({ toggleSidebar }) => {
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const { user, logout } = useContext(AuthContext);
+  const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+    setShowUserMenu(false);
+  };
+  
+  const toggleUserMenu = () => {
+    setShowUserMenu(!showUserMenu);
+  };
+  
+  return (
+    <header className="app-header">
+      <div className="header-left">
+        <button className="sidebar-toggle" onClick={toggleSidebar}>
+          <span className="hamburger-line"></span>
+          <span className="hamburger-line"></span>
+          <span className="hamburger-line"></span>
+        </button>
+        
+        <Link to="/" className="header-logo">
+          <span className="logo-text">CyberThreat Atlas</span>
+        </Link>
+      </div>
+      
+      <div className="header-center">
+        <div className="search-container">
+          <input 
+            type="text" 
+            placeholder="Rechercher des menaces, groupes, techniques..." 
+            className="search-input"
+          />
+          <button className="search-button">
+            🔍
+          </button>
+        </div>
+      </div>
+      
+      <div className="header-right">
+        <button 
+          className="theme-toggle"
+          onClick={toggleDarkMode}
+          title={isDarkMode ? 'Mode clair' : 'Mode sombre'}
+        >
+          {isDarkMode ? '☀️' : '🌙'}
+        </button>
+        
+        <div className="notifications">
+          <button className="notification-button">
+            🔔
+            <span className="notification-badge">3</span>
+          </button>
+        </div>
+        
+        {user ? (
+          <div className="user-menu">
+            <button className="user-avatar" onClick={toggleUserMenu}>
+              <span className="avatar-text">{user.name?.charAt(0) || 'U'}</span>
+            </button>
+            
+            {showUserMenu && (
+              <div className="user-dropdown">
+                <Link to="/profile" className="dropdown-item" onClick={() => setShowUserMenu(false)}>
+                  Mon profil
+                </Link>
+                <Link to="/settings" className="dropdown-item" onClick={() => setShowUserMenu(false)}>
+                  Paramètres
+                </Link>
+                <hr className="dropdown-divider" />
+                <button className="dropdown-item logout" onClick={handleLogout}>
+                  Déconnexion
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="auth-buttons">
+            <Link to="/login" className="btn btn-outline-primary">Connexion</Link>
+            <Link to="/register" className="btn btn-primary">Inscription</Link>
+          </div>
+        )}
+      </div>
+    </header>
+  );
+};
+
+export default Header;

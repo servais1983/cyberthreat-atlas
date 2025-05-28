@@ -1,1 +1,45 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';\n\n// Création du contexte\nconst ThemeContext = createContext();\n\n// Hook personnalisé pour utiliser le contexte de thème\nexport const useTheme = () => {\n  return useContext(ThemeContext);\n};\n\n// Fournisseur du contexte qui encapsule les composants enfants\nexport const ThemeProvider = ({ children }) => {\n  // Vérifier si un thème est déjà enregistré dans le localStorage\n  const [darkMode, setDarkMode] = useState(() => {\n    const savedTheme = localStorage.getItem('cyberthreat-atlas-theme');\n    // Vérifier également la préférence du système\n    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;\n    \n    // Si un thème est enregistré, l'utiliser, sinon utiliser la préférence du système\n    return savedTheme ? savedTheme === 'dark' : prefersDark;\n  });\n  \n  // Appliquer le thème au DOM\n  useEffect(() => {\n    if (darkMode) {\n      document.body.classList.add('dark-mode');\n    } else {\n      document.body.classList.remove('dark-mode');\n    }\n    \n    // Enregistrer le thème dans localStorage\n    localStorage.setItem('cyberthreat-atlas-theme', darkMode ? 'dark' : 'light');\n  }, [darkMode]);\n  \n  // Fonction pour basculer entre les thèmes\n  const toggleDarkMode = () => {\n    setDarkMode(prevMode => !prevMode);\n  };\n  \n  // Valeurs exposées par le contexte\n  const value = {\n    darkMode,\n    toggleDarkMode\n  };\n  \n  return (\n    <ThemeContext.Provider value={value}>\n      {children}\n    </ThemeContext.Provider>\n  );\n};
+import React, { createContext, useState, useEffect } from 'react';
+
+export const ThemeContext = createContext();
+
+export const ThemeProvider = ({ children }) => {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    // Récupérer le thème sauvegardé ou utiliser la préférence système
+    const savedTheme = localStorage.getItem('cyberthreat-atlas-theme');
+    if (savedTheme) {
+      return savedTheme === 'dark';
+    }
+    
+    // Détecter la préférence système
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
+  
+  useEffect(() => {
+    // Appliquer le thème à l'élément racine
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark-mode');
+    } else {
+      document.documentElement.classList.remove('dark-mode');
+    }
+    
+    // Sauvegarder la préférence
+    localStorage.setItem('cyberthreat-atlas-theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+  
+  const toggleDarkMode = () => {
+    setIsDarkMode(prev => !prev);
+  };
+  
+  const contextValue = {
+    isDarkMode,
+    toggleDarkMode
+  };
+  
+  return (
+    <ThemeContext.Provider value={contextValue}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+export default ThemeProvider;
