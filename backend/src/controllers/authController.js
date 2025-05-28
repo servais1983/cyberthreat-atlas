@@ -1,10 +1,11 @@
-const crypto = require('crypto');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
+const config = require('../config');
 
-// Register a new user
+// Register user
 exports.register = async (req, res) => {
   // Check for validation errors
   const errors = validationResult(req);
@@ -15,7 +16,7 @@ exports.register = async (req, res) => {
     });
   }
   
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
   
   try {
     // Check if user already exists
@@ -28,22 +29,21 @@ exports.register = async (req, res) => {
       });
     }
     
-    // Create a new user
+    // Create new user
     user = new User({
       name,
       email,
-      password,
-      role: role || 'analyst' // Default role
+      password
     });
     
-    // Hash the password
+    // Hash password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
     
-    // Save the user
+    // Save user to database
     await user.save();
     
-    // Create token payload
+    // Generate JWT
     const payload = {
       user: {
         id: user.id,
@@ -51,11 +51,10 @@ exports.register = async (req, res) => {
       }
     };
     
-    // Generate token
     jwt.sign(
       payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' },
+      config.security.jwtSecret,
+      { expiresIn: config.security.jwtExpiresIn },
       (err, token) => {
         if (err) throw err;
         res.status(201).json({
@@ -108,7 +107,7 @@ exports.login = async (req, res) => {
       });
     }
     
-    // Create token payload
+    // Generate JWT
     const payload = {
       user: {
         id: user.id,
@@ -116,22 +115,15 @@ exports.login = async (req, res) => {
       }
     };
     
-    // Generate token
     jwt.sign(
       payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' },
+      config.security.jwtSecret,
+      { expiresIn: config.security.jwtExpiresIn },
       (err, token) => {
         if (err) throw err;
         res.status(200).json({
           success: true,
-          token,
-          user: {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role
-          }
+          token
         });
       }
     );
