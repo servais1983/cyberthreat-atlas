@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 
 // Création du contexte d'authentification
 const AuthContext = createContext({
@@ -15,13 +15,19 @@ const AuthContext = createContext({
 });
 
 // Hook personnalisé pour utiliser le contexte d'authentification
-export const useAuth = () => useContext(AuthContext);
+const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
+};
 
 // Fournisseur du contexte d'authentification
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Changé à false pour éviter les appels API
+  const [isLoading, setIsLoading] = useState(false);
   
   // Fonction pour définir le token dans le local storage
   const setToken = (token) => {
@@ -205,6 +211,6 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-// Export du contexte
-export { AuthContext };
+// Exports
+export { AuthContext, AuthProvider, useAuth };
 export default AuthContext;
