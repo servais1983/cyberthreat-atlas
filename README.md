@@ -84,17 +84,47 @@ L'application est configurée pour intégrer automatiquement une base de donnée
 - **Campagnes majeures** - Historique des attaques significatives
 - **Régions et secteurs** - Cartographie complète des cibles
 
-Les données sont collectées directement depuis les sources officielles STIX JSON de MITRE ATT&CK, garantissant l'exhaustivité et la précision des informations.
+### 🛠️ Dépannage de la base de données
+
+Si vous constatez que la base de données est vide après le démarrage (ce qui peut arriver si l'intégration automatique échoue), utilisez le script de secours `fix.js` :
+
+```bash
+# Exécuter le script de secours pour initialiser la base avec des données professionnelles
+docker-compose exec backend node src/fix.js
+```
+
+Ce script injecte directement un ensemble de données professionnelles dans MongoDB :
+- Groupes d'attaque (APT28, APT29, Lazarus Group)
+- Techniques MITRE ATT&CK
+- Campagnes majeures (SolarWinds, NotPetya)
+- Malwares, régions et secteurs
+
+Pour enrichir davantage ce script avec vos propres données :
+1. Modifiez le fichier `backend/src/fix.js`
+2. Ajoutez de nouveaux objets dans les tableaux correspondants (attackGroups, techniques, etc.)
+3. Exécutez à nouveau le script pour mettre à jour la base
 
 ### 🔍 Vérification de la base de données
 
-Pour vérifier que la base de données a été correctement peuplée avec toutes les données exhaustives, vous pouvez exécuter le script de diagnostic :
+Pour vérifier que la base de données a été correctement peuplée, exécutez le script de diagnostic :
 
 ```bash
 docker-compose exec backend node src/diagnoseDatabaseContent.js
 ```
 
 Ce script affichera le nombre d'entrées dans chaque collection et des exemples de données, vous permettant de confirmer que l'application n'est plus une simple démo mais une solution professionnelle complète.
+
+### 🔧 Résolution des problèmes d'intégration automatique
+
+Si vous souhaitez bénéficier de l'intégration automatique complète des données MITRE ATT&CK, vous devrez peut-être installer des dépendances supplémentaires dans le conteneur backend :
+
+```bash
+# Accéder au conteneur backend
+docker-compose exec backend bash
+
+# Installer les dépendances nécessaires
+npm install axios stix2
+```
 
 ### 🐳 Commandes Docker Utiles
 
@@ -136,9 +166,9 @@ L'API REST est documentée avec Swagger et accessible à l'adresse `/api-docs` l
 ### Problèmes Courants
 
 **Base de données vide ou incomplète:**
-- Vérifiez les logs du backend pour suivre le processus d'intégration des données
-- Exécutez le script de diagnostic pour vérifier le contenu de la base de données
-- Si nécessaire, redémarrez les conteneurs pour forcer une nouvelle intégration
+- Vérifiez les logs du backend pour identifier les erreurs : `docker-compose logs -f backend`
+- Exécutez le script de secours pour initialiser la base : `docker-compose exec backend node src/fix.js`
+- Vérifiez que l'initialisation a fonctionné : `docker-compose exec backend node src/diagnoseDatabaseContent.js`
 
 **Erreur de connexion MongoDB:**
 - Vérifiez que MongoDB est correctement configuré dans le conteneur
@@ -184,8 +214,11 @@ La documentation complète est disponible dans le dossier `docs/` :
 
 ### 💬 Questions Fréquentes
 
-**Q: Comment vérifier que la base de données contient bien toutes les données exhaustives ?**  
-R: Exécutez le script de diagnostic avec la commande `docker-compose exec backend node src/diagnoseDatabaseContent.js` pour voir le nombre d'entrées dans chaque collection et des exemples de données.
+**Q: Comment initialiser rapidement la base de données avec des données professionnelles ?**  
+R: Exécutez le script de secours avec la commande `docker-compose exec backend node src/fix.js`, puis vérifiez avec `docker-compose exec backend node src/diagnoseDatabaseContent.js`.
+
+**Q: Comment ajouter mes propres données de threat intelligence ?**  
+R: Modifiez le fichier `backend/src/fix.js` pour ajouter vos propres groupes, techniques ou campagnes, puis exécutez-le à nouveau.
 
 **Q: L'application fonctionne-t-elle hors ligne ?**  
 R: Une fois les données chargées, la plupart des fonctionnalités sont disponibles hors ligne, mais les mises à jour en temps réel nécessitent une connexion.
