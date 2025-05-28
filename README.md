@@ -2,16 +2,17 @@
 
 # CyberThreat Atlas
 
-Une plateforme complète de visualisation et d'analyse des menaces cyber, permettant de suivre les groupes d'attaque, les campagnes, les techniques et les indicateurs de compromission.
+Une plateforme professionnelle complète de visualisation et d'analyse des menaces cyber, permettant de suivre les groupes d'attaque, les campagnes, les techniques et les indicateurs de compromission. Les données sont automatiquement mises à jour à chaque démarrage de l'application à partir de sources fiables de threat intelligence.
 
 ## 🔍 Fonctionnalités
 
 - **🌐 Cartographie des menaces** - Visualisation géographique des activités malveillantes
-- **👥 Profils de groupes d'attaque** - Informations détaillées sur les APTs et leurs tactiques
+- **👥 Profils de groupes d'attaque** - Informations détaillées sur tous les APTs connus
 - **⏱️ Timeline des campagnes** - Chronologie interactive des campagnes d'attaque
 - **🔗 Analyse des relations** - Visualisation des liens entre acteurs, techniques et campagnes
 - **📊 Tableaux de bord** - Statistiques et métriques sur les menaces actuelles
 - **🔍 Recherche avancée** - Filtrage multicritères des données de menaces
+- **🔄 Base de données exhaustive** - Intégration de toutes les données MITRE ATT&CK
 - **📱 Interface responsive** - Expérience optimisée sur tous les appareils
 
 ## 🛠️ Technologies
@@ -55,6 +56,46 @@ L'application sera accessible à :
 - Backend API : http://localhost:5000
 - API Documentation : http://localhost:5000/api-docs
 
+### 🔄 Mise à jour de l'application
+
+Pour mettre à jour votre installation locale avec les dernières améliorations :
+
+```bash
+# 1. Arrêtez les conteneurs
+docker-compose down
+
+# 2. Récupérez les dernières modifications
+git pull
+
+# 3. Reconstruisez les images sans cache
+docker-compose build --no-cache
+
+# 4. Redémarrez les conteneurs
+docker-compose up -d
+```
+
+### 🔄 Base de données exhaustive et professionnelle
+
+L'application est configurée pour intégrer automatiquement une base de données exhaustive et professionnelle à chaque démarrage du backend. Cette intégration inclut :
+
+- **Tous les groupes APT connus** - Collectés depuis le référentiel officiel MITRE ATT&CK
+- **Toutes les techniques MITRE ATT&CK** - Framework complet de tactiques et techniques
+- **Tous les malwares documentés** - Avec leurs caractéristiques et relations
+- **Campagnes majeures** - Historique des attaques significatives
+- **Régions et secteurs** - Cartographie complète des cibles
+
+Les données sont collectées directement depuis les sources officielles STIX JSON de MITRE ATT&CK, garantissant l'exhaustivité et la précision des informations.
+
+### 🔍 Vérification de la base de données
+
+Pour vérifier que la base de données a été correctement peuplée avec toutes les données exhaustives, vous pouvez exécuter le script de diagnostic :
+
+```bash
+docker-compose exec backend node src/diagnoseDatabaseContent.js
+```
+
+Ce script affichera le nombre d'entrées dans chaque collection et des exemples de données, vous permettant de confirmer que l'application n'est plus une simple démo mais une solution professionnelle complète.
+
 ### 🐳 Commandes Docker Utiles
 
 ```bash
@@ -63,9 +104,6 @@ docker-compose logs -f
 
 # Logs du backend uniquement
 docker-compose logs -f backend
-
-# Logs du frontend uniquement
-docker-compose logs -f frontend
 
 # Arrêter les conteneurs
 docker-compose down
@@ -96,6 +134,11 @@ L'API REST est documentée avec Swagger et accessible à l'adresse `/api-docs` l
 ## 🐛 Dépannage
 
 ### Problèmes Courants
+
+**Base de données vide ou incomplète:**
+- Vérifiez les logs du backend pour suivre le processus d'intégration des données
+- Exécutez le script de diagnostic pour vérifier le contenu de la base de données
+- Si nécessaire, redémarrez les conteneurs pour forcer une nouvelle intégration
 
 **Erreur de connexion MongoDB:**
 - Vérifiez que MongoDB est correctement configuré dans le conteneur
@@ -135,13 +178,14 @@ L'API REST est documentée avec Swagger et accessible à l'adresse `/api-docs` l
 La documentation complète est disponible dans le dossier `docs/` :
 - 📋 [Conception détaillée](docs/conception_atlas_cybermenaces.md) - Architecture et design du projet
 - ✅ [Validation professionnelle](docs/validation_professionnelle.md) - Conformité aux standards professionnels
+- 🔄 [Intégration des données MITRE](docs/integration_donnees_mitre.md) - Détails sur le système d'intégration des données
 
 ## ❓ FAQ et Support
 
 ### 💬 Questions Fréquentes
 
-**Q: Comment ajouter de nouvelles données de menaces ?**  
-R: Utilisez l'interface d'administration accessible via le menu "Admin" ou importez des données via l'API.
+**Q: Comment vérifier que la base de données contient bien toutes les données exhaustives ?**  
+R: Exécutez le script de diagnostic avec la commande `docker-compose exec backend node src/diagnoseDatabaseContent.js` pour voir le nombre d'entrées dans chaque collection et des exemples de données.
 
 **Q: L'application fonctionne-t-elle hors ligne ?**  
 R: Une fois les données chargées, la plupart des fonctionnalités sont disponibles hors ligne, mais les mises à jour en temps réel nécessitent une connexion.

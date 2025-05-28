@@ -13,6 +13,7 @@ const rateLimit = require('express-rate-limit');
 // Importation des configurations et services
 const config = require('./config');
 const connectDB = require('./database');
+const { integrateMitreData } = require('./scripts/integrateMitreData');
 // const logger = require('./utils/logger');
 
 // Importation des routes
@@ -89,6 +90,17 @@ const startServer = async () => {
   try {
     // Connexion à MongoDB
     await connectDB();
+    console.log('MongoDB connecté');
+    
+    // Intégration des données MITRE ATT&CK
+    console.log('Démarrage de l\'intégration des données MITRE ATT&CK...');
+    try {
+      await integrateMitreData();
+      console.log('Intégration des données MITRE ATT&CK terminée avec succès');
+    } catch (error) {
+      console.error('Erreur lors de l\'intégration des données MITRE ATT&CK:', error);
+      console.log('Le serveur continuera à démarrer malgré l\'erreur d\'intégration');
+    }
     
     // Démarrage du serveur HTTP
     const PORT = config.server.port;

@@ -37,6 +37,8 @@ services:
       - JWT_SECRET=${JWT_SECRET:-cyberthreatsecretkey}
       - JWT_EXPIRES_IN=24h
       - CORS_ORIGIN=http://localhost:3001
+      - UPDATE_ON_STARTUP=true
+      - UPDATE_SCHEDULE=0 */6 * * *
     ports:
       - "5000:5000"
     # Volumes commentés pour éviter d'écraser les fichiers corrigés
