@@ -1,1 +1,22 @@
-/**\n * Index des modèles de données MongoDB\n * Ce fichier exporte tous les modèles de données de l'application\n */\n\nconst AttackGroup = require('./AttackGroup');\nconst Technique = require('./Technique');\nconst Campaign = require('./Campaign');\nconst Malware = require('./Malware');\nconst Indicator = require('./Indicator');\nconst Sector = require('./Sector');\nconst Region = require('./Region');\n\nmodule.exports = {\n  AttackGroup,\n  Technique,\n  Campaign,\n  Malware,\n  Indicator,\n  Sector,\n  Region\n};
+/**
+ * Index des modèles de données MongoDB
+ * Ce fichier exporte tous les modèles de données de l'application
+ */
+
+const AttackGroup = require('./AttackGroup');
+const Technique = require('./Technique');
+const Campaign = require('./Campaign');
+const Malware = require('./Malware');
+const Indicator = require('./Indicator');
+const Sector = require('./Sector');
+const Region = require('./Region');
+
+module.exports = {
+  AttackGroup,
+  Technique,
+  Campaign,
+  Malware,
+  Indicator,
+  Sector,
+  Region
+};

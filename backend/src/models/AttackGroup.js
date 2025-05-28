@@ -1,1 +1,125 @@
-const mongoose = require('mongoose');\n\n/**\n * Modèle Mongoose pour les groupes d'attaque (APTs)\n */\nconst AttackGroupSchema = new mongoose.Schema({\n  name: {\n    type: String,\n    required: true,\n    unique: true,\n    trim: true\n  },\n  aliases: [{\n    type: String,\n    trim: true\n  }],\n  countryOfOrigin: {\n    type: String,\n    trim: true\n  },\n  description: {\n    type: String\n  },\n  firstSeen: {\n    type: Date\n  },\n  lastSeen: {\n    type: Date\n  },\n  motivations: [{\n    type: String,\n    trim: true\n  }],\n  targetSectors: [{\n    type: String,\n    trim: true\n  }],\n  targetRegions: [{\n    type: String,\n    trim: true\n  }],\n  sophisticationLevel: {\n    type: String,\n    enum: ['Low', 'Medium', 'High', 'Unknown'],\n    default: 'Unknown'\n  },\n  references: [{\n    url: {\n      type: String,\n      required: true\n    },\n    source: {\n      type: String,\n      required: true\n    },\n    description: {\n      type: String\n    }\n  }],\n  relatedGroups: [{\n    type: String\n  }],\n  threatLevel: {\n    type: Number,\n    min: 1,\n    max: 10,\n    default: 5\n  },\n  createdAt: {\n    type: Date,\n    default: Date.now\n  },\n  updatedAt: {\n    type: Date,\n    default: Date.now\n  }\n}, {\n  timestamps: true\n});\n\n// Index pour les recherches textuelles\nAttackGroupSchema.index({ \n  name: 'text', \n  aliases: 'text', \n  description: 'text' \n});\n\n// Middleware pour mettre à jour la date de dernière modification\nAttackGroupSchema.pre('save', function(next) {\n  this.updatedAt = Date.now();\n  next();\n});\n\n// Méthode pour obtenir les techniques utilisées par ce groupe\nAttackGroupSchema.methods.getTechniques = async function() {\n  const Campaign = mongoose.model('Campaign');\n  const Technique = mongoose.model('Technique');\n  \n  // Trouver toutes les campagnes menées par ce groupe\n  const campaigns = await Campaign.find({ attackGroups: this.name });\n  \n  // Extraire tous les IDs de techniques uniques\n  const techniqueIds = [...new Set(\n    campaigns.flatMap(campaign => campaign.techniques)\n  )];\n  \n  // Récupérer les détails des techniques\n  return await Technique.find({ mitreId: { $in: techniqueIds } });\n};\n\n// Méthode pour obtenir les malwares utilisés par ce groupe\nAttackGroupSchema.methods.getMalware = async function() {\n  const Malware = mongoose.model('Malware');\n  return await Malware.find({ associatedGroups: this.name });\n};\n\n// Méthode pour obtenir les campagnes menées par ce groupe\nAttackGroupSchema.methods.getCampaigns = async function() {\n  const Campaign = mongoose.model('Campaign');\n  return await Campaign.find({ attackGroups: this.name });\n};\n\nconst AttackGroup = mongoose.model('AttackGroup', AttackGroupSchema);\n\nmodule.exports = AttackGroup;
+const mongoose = require('mongoose');
+
+/**
+ * Modèle Mongoose pour les groupes d'attaque (APTs)
+ */
+const AttackGroupSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  aliases: [{
+    type: String,
+    trim: true
+  }],
+  countryOfOrigin: {
+    type: String,
+    trim: true
+  },
+  description: {
+    type: String
+  },
+  firstSeen: {
+    type: Date
+  },
+  lastSeen: {
+    type: Date
+  },
+  motivations: [{
+    type: String,
+    trim: true
+  }],
+  targetSectors: [{
+    type: String,
+    trim: true
+  }],
+  targetRegions: [{
+    type: String,
+    trim: true
+  }],
+  sophisticationLevel: {
+    type: String,
+    enum: ['Low', 'Medium', 'High', 'Unknown'],
+    default: 'Unknown'
+  },
+  references: [{
+    url: {
+      type: String,
+      required: true
+    },
+    source: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String
+    }
+  }],
+  relatedGroups: [{
+    type: String
+  }],
+  threatLevel: {
+    type: Number,
+    min: 1,
+    max: 10,
+    default: 5
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+}, {
+  timestamps: true
+});
+
+// Index pour les recherches textuelles
+AttackGroupSchema.index({ 
+  name: 'text', 
+  aliases: 'text', 
+  description: 'text' 
+});
+
+// Middleware pour mettre à jour la date de dernière modification
+AttackGroupSchema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+// Méthode pour obtenir les techniques utilisées par ce groupe
+AttackGroupSchema.methods.getTechniques = async function() {
+  const Campaign = mongoose.model('Campaign');
+  const Technique = mongoose.model('Technique');
+  
+  // Trouver toutes les campagnes menées par ce groupe
+  const campaigns = await Campaign.find({ attackGroups: this.name });
+  
+  // Extraire tous les IDs de techniques uniques
+  const techniqueIds = [...new Set(
+    campaigns.flatMap(campaign => campaign.techniques)
+  )];
+  
+  // Récupérer les détails des techniques
+  return await Technique.find({ mitreId: { $in: techniqueIds } });
+};
+
+// Méthode pour obtenir les malwares utilisés par ce groupe
+AttackGroupSchema.methods.getMalware = async function() {
+  const Malware = mongoose.model('Malware');
+  return await Malware.find({ associatedGroups: this.name });
+};
+
+// Méthode pour obtenir les campagnes menées par ce groupe
+AttackGroupSchema.methods.getCampaigns = async function() {
+  const Campaign = mongoose.model('Campaign');
+  return await Campaign.find({ attackGroups: this.name });
+};
+
+const AttackGroup = mongoose.model('AttackGroup', AttackGroupSchema);
+
+module.exports = AttackGroup;

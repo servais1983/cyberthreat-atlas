@@ -1,27 +1,28 @@
 const mongoose = require('mongoose');
 
 /**
- * Modèle Mongoose pour les techniques d'attaque (basé sur MITRE ATT&CK)
+ * Modèle Mongoose pour les techniques d'attaque (MITRE ATT&CK)
  */
 const TechniqueSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
   mitreId: {
     type: String,
     required: true,
     unique: true,
     trim: true
   },
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
   description: {
     type: String
   },
-  tactics: [{
+  tactic: {
     type: String,
     trim: true
-  }],
+  },
   platforms: [{
     type: String,
     trim: true
@@ -30,11 +31,10 @@ const TechniqueSchema = new mongoose.Schema({
     type: String,
     trim: true
   }],
-  mitigations: [{
-    type: String,
-    trim: true
-  }],
-  detectionMethods: {
+  mitigation: {
+    type: String
+  },
+  detection: {
     type: String
   },
   references: [{
@@ -50,11 +50,6 @@ const TechniqueSchema = new mongoose.Schema({
       type: String
     }
   }],
-  severity: {
-    type: String,
-    enum: ['Low', 'Medium', 'High'],
-    default: 'Medium'
-  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -70,8 +65,8 @@ const TechniqueSchema = new mongoose.Schema({
 // Index pour les recherches textuelles
 TechniqueSchema.index({ 
   name: 'text', 
-  description: 'text',
-  mitreId: 'text'
+  mitreId: 'text', 
+  description: 'text' 
 });
 
 // Middleware pour mettre à jour la date de dernière modification
@@ -80,8 +75,8 @@ TechniqueSchema.pre('save', function(next) {
   next();
 });
 
-// Méthode pour obtenir les groupes utilisant cette technique
-TechniqueSchema.methods.getAttackGroups = async function() {
+// Méthode pour obtenir les groupes d'attaque utilisant cette technique
+TechniqueSchema.methods.getUsingGroups = async function() {
   const Campaign = mongoose.model('Campaign');
   const AttackGroup = mongoose.model('AttackGroup');
   
@@ -98,26 +93,9 @@ TechniqueSchema.methods.getAttackGroups = async function() {
 };
 
 // Méthode pour obtenir les campagnes utilisant cette technique
-TechniqueSchema.methods.getCampaigns = async function() {
+TechniqueSchema.methods.getUsingCampaigns = async function() {
   const Campaign = mongoose.model('Campaign');
   return await Campaign.find({ techniques: this.mitreId });
-};
-
-// Méthode pour obtenir les malwares associés à cette technique
-TechniqueSchema.methods.getRelatedMalware = async function() {
-  const Campaign = mongoose.model('Campaign');
-  const Malware = mongoose.model('Malware');
-  
-  // Trouver toutes les campagnes utilisant cette technique
-  const campaigns = await Campaign.find({ techniques: this.mitreId });
-  
-  // Extraire tous les noms de malwares uniques
-  const malwareNames = [...new Set(
-    campaigns.flatMap(campaign => campaign.malware)
-  )];
-  
-  // Récupérer les détails des malwares
-  return await Malware.find({ name: { $in: malwareNames } });
 };
 
 const Technique = mongoose.model('Technique', TechniqueSchema);
