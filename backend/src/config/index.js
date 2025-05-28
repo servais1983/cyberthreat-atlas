@@ -16,7 +16,7 @@ module.exports = {
   },
   
   // Configuration de la base de données
-  mongoURI: process.env.MONGO_URI || 'mongodb://localhost:27017/cyberthreat-atlas',
+  mongoURI: process.env.MONGO_URI || 'mongodb://admin:password@mongodb:27017/cyberthreat-atlas?authSource=admin',
   
   // Configuration de sécurité
   security: {
