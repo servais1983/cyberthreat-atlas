@@ -90,7 +90,7 @@ Un atlas professionnel des cybermenaces pour les analystes en sécurité, offran
 - Node.js (v18+)
 - MongoDB (v5+)
 - Git
-- Docker et Docker Compose (optionnel)
+- Docker et Docker Compose (recommandé)
 
 ### 🚀 Installation Rapide (Windows & Linux)
 
@@ -117,7 +117,7 @@ chmod +x install.sh
 ./install.sh
 ```
 
-#### Option 2: Installation avec Docker Compose
+#### Option 2: Installation avec Docker Compose (Recommandée)
 
 ```bash
 # Cloner le dépôt
@@ -131,61 +131,7 @@ docker-compose up -d
 L'application sera accessible à :
 - Frontend : http://localhost:3000
 - Backend API : http://localhost:5000
-
-### 💻 Installation Manuelle
-
-1. **📥 Cloner le dépôt**
-```bash
-git clone https://github.com/servais1983/cyberthreat-atlas.git
-cd cyberthreat-atlas
-```
-
-2. **📚 Installer les dépendances Backend**
-```bash
-cd backend
-npm install
-```
-
-3. **⚙️ Configurer l'environnement Backend**
-```bash
-# Créer le fichier .env
-cp .env.example .env
-
-# Éditer le fichier .env avec vos paramètres
-# Exemple de configuration :
-# PORT=5000
-# MONGODB_URI=mongodb://localhost:27017/cyberthreat-atlas
-# JWT_SECRET=votre_secret_jwt_securise
-```
-
-4. **📚 Installer les dépendances Frontend**
-```bash
-cd ../frontend
-npm install
-```
-
-5. **🚀 Démarrer l'application**
-
-**Méthode 1 - Terminaux séparés:**
-```bash
-# Terminal 1 - Backend
-cd backend
-npm start
-
-# Terminal 2 - Frontend
-cd frontend
-npm start
-```
-
-**Méthode 2 - Concurrently (recommandé):**
-```bash
-# Depuis la racine du projet, après avoir installé concurrently
-npm install -g concurrently
-
-# Démarrer les deux services
-cd backend
-npm run dev
-```
+- API Documentation : http://localhost:5000/api-docs
 
 ### 🐳 Déploiement avec Docker
 
@@ -216,34 +162,13 @@ docker-compose down
 docker-compose down -v
 ```
 
-### 🔧 Scripts NPM Disponibles
-
-**Backend (`backend/package.json`):**
-- `npm start` - Démarre le serveur en production
-- `npm run dev` - Démarre le serveur en développement avec nodemon
-- `npm run test` - Lance les tests
-- `npm run seed` - Initialise la base de données avec des données de démonstration
-
-**Frontend (`frontend/package.json`):**
-- `npm start` - Démarre l'application React en développement
-- `npm run build` - Construit l'application pour la production
-- `npm run test` - Lance les tests
-- `npm run eject` - Éjecte la configuration Create React App (attention : irréversible)
-
-## 📖 Documentation
-
-La documentation complète est disponible dans le dossier `docs/` :
-
-- 📋 [Conception détaillée](docs/conception_atlas_cybermenaces.md) - Architecture et design du projet
-- ✅ [Validation professionnelle](docs/validation_professionnelle.md) - Conformité aux standards professionnels
-
-## 🔌 API Documentation
+### 🔧 Points d'API Importants
 
 L'API REST est documentée avec Swagger et accessible à l'adresse `/api-docs` lorsque le serveur backend est en cours d'exécution.
 
-### 📡 Points d'Entrée Principaux
 | Méthode | Point d'entrée | Description |
 |---------|---------------|-------------|
+| GET | `/api/v1/health` | Vérification de l'état de santé de l'API |
 | GET | `/api/v1/attack-groups` | Liste des groupes d'attaque |
 | GET | `/api/v1/attack-groups/:id` | Détails d'un groupe d'attaque |
 | GET | `/api/v1/campaigns` | Liste des campagnes |
@@ -265,13 +190,15 @@ L'API REST est documentée avec Swagger et accessible à l'adresse `/api-docs` l
 - Changez les ports dans les fichiers `.env` ou `docker-compose.yml`
 - Arrêtez les services qui utilisent les ports 3000 ou 5000
 
-**Erreur npm install:**
-- Supprimez `node_modules` et `package-lock.json`, puis réessayez
-- Assurez-vous d'utiliser Node.js v18+
-
 **Erreur Docker:**
 - Vérifiez que Docker Desktop est démarré
+- Vérifiez les logs avec `docker-compose logs -f`
 - Nettoyez les images : `docker system prune -a`
+
+**Conteneur backend unhealthy:**
+- Vérifiez que la route `/api/v1/health` est accessible
+- Vérifiez les logs du backend avec `docker-compose logs -f backend`
+- Assurez-vous que MongoDB est correctement configuré et accessible
 
 ## 🚀 Guide de Démarrage Rapide
 
@@ -281,6 +208,13 @@ L'API REST est documentée avec Swagger et accessible à l'adresse `/api-docs` l
 4. **👥 Groupes d'Attaque** - Consultez les profils détaillés des acteurs malveillants
 5. **⏰ Timeline** - Analysez la chronologie des campagnes d'attaque
 6. **📄 Rapports** - Générez des rapports personnalisés sur les menaces
+
+## 📖 Documentation
+
+La documentation complète est disponible dans le dossier `docs/` :
+
+- 📋 [Conception détaillée](docs/conception_atlas_cybermenaces.md) - Architecture et design du projet
+- ✅ [Validation professionnelle](docs/validation_professionnelle.md) - Conformité aux standards professionnels
 
 ## ❓ FAQ et Support
 
