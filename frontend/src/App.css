@@ -1,1 +1,288 @@
-/* Styles globaux pour CyberThreat Atlas */\n\n/* Réinitialisation et base */\n* {\n  box-sizing: border-box;\n  margin: 0;\n  padding: 0;\n}\n\n:root {\n  --primary-color: #0056b3;\n  --primary-light: #0078ff;\n  --primary-dark: #003d82;\n  --secondary-color: #6c757d;\n  --success-color: #28a745;\n  --danger-color: #dc3545;\n  --warning-color: #fd7e14;\n  --info-color: #17a2b8;\n  --light-color: #f8f9fa;\n  --dark-color: #343a40;\n  --body-bg: #f4f6f9;\n  --card-bg: #ffffff;\n  --text-primary: #333333;\n  --text-secondary: #6c757d;\n  --text-light: #f8f9fa;\n  --border-color: #dee2e6;\n  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);\n  --font-primary: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n  --font-code: Consolas, Monaco, 'Andale Mono', monospace;\n  --sidebar-width: 280px;\n  --header-height: 64px;\n  --footer-height: 60px;\n  --transition-speed: 0.3s;\n  --border-radius: 5px;\n}\n\nbody {\n  font-family: var(--font-primary);\n  color: var(--text-primary);\n  background-color: var(--body-bg);\n  line-height: 1.6;\n  overflow-x: hidden;\n}\n\n/* Conteneur principal */\n.app-container {\n  display: flex;\n  flex-direction: column;\n  min-height: 100vh;\n}\n\n/* Zone principale de contenu */\n.app-main {\n  display: flex;\n  flex: 1;\n  padding-top: var(--header-height);\n}\n\n.content-area {\n  flex: 1;\n  padding: 25px;\n  margin-left: var(--sidebar-width);\n  min-height: calc(100vh - var(--header-height) - var(--footer-height));\n  transition: margin-left var(--transition-speed);\n}\n\n.content-expanded {\n  margin-left: 0;\n}\n\n/* Écran de chargement */\n.loading-screen {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  background-color: var(--body-bg);\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 9999;\n}\n\n.loading-spinner {\n  width: 50px;\n  height: 50px;\n  border: 5px solid var(--border-color);\n  border-top: 5px solid var(--primary-color);\n  border-radius: 50%;\n  animation: spin 1s linear infinite;\n  margin-bottom: 20px;\n}\n\n@keyframes spin {\n  0% { transform: rotate(0deg); }\n  100% { transform: rotate(360deg); }\n}\n\n/* Cartes */\n.card {\n  background-color: var(--card-bg);\n  border-radius: var(--border-radius);\n  box-shadow: var(--shadow);\n  padding: 20px;\n  margin-bottom: 25px;\n}\n\n.card-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding-bottom: 15px;\n  margin-bottom: 15px;\n  border-bottom: 1px solid var(--border-color);\n}\n\n.card-title {\n  font-size: 1.25rem;\n  font-weight: 600;\n  color: var(--primary-dark);\n  margin: 0;\n}\n\n.card-body {\n  padding: 0;\n}\n\n.card-footer {\n  padding-top: 15px;\n  margin-top: 15px;\n  border-top: 1px solid var(--border-color);\n  display: flex;\n  justify-content: flex-end;\n}\n\n/* Grilles */\n.grid-container {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));\n  gap: 20px;\n}\n\n/* Formulaires */\ninput, select, textarea {\n  width: 100%;\n  padding: 10px 15px;\n  margin-bottom: 15px;\n  border: 1px solid var(--border-color);\n  border-radius: var(--border-radius);\n  font-family: var(--font-primary);\n  font-size: 14px;\n}\n\ninput:focus, select:focus, textarea:focus {\n  outline: none;\n  border-color: var(--primary-color);\n  box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.25);\n}\n\n/* Boutons */\n.btn {\n  display: inline-block;\n  font-weight: 500;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: middle;\n  user-select: none;\n  border: 1px solid transparent;\n  padding: 0.475rem 1rem;\n  font-size: 14px;\n  line-height: 1.5;\n  border-radius: var(--border-radius);\n  transition: all 0.15s ease-in-out;\n  cursor: pointer;\n}\n\n.btn-primary {\n  color: white;\n  background-color: var(--primary-color);\n  border-color: var(--primary-color);\n}\n\n.btn-primary:hover {\n  background-color: var(--primary-dark);\n  border-color: var(--primary-dark);\n}\n\n.btn-secondary {\n  color: white;\n  background-color: var(--secondary-color);\n  border-color: var(--secondary-color);\n}\n\n.btn-secondary:hover {\n  background-color: #5a6268;\n  border-color: #545b62;\n}\n\n.btn-success {\n  color: white;\n  background-color: var(--success-color);\n  border-color: var(--success-color);\n}\n\n.btn-danger {\n  color: white;\n  background-color: var(--danger-color);\n  border-color: var(--danger-color);\n}\n\n.btn-outline-primary {\n  color: var(--primary-color);\n  background-color: transparent;\n  border-color: var(--primary-color);\n}\n\n.btn-outline-primary:hover {\n  color: white;\n  background-color: var(--primary-color);\n}\n\n/* Badges */\n.badge {\n  display: inline-block;\n  padding: 0.25em 0.6em;\n  font-size: 12px;\n  font-weight: 500;\n  line-height: 1;\n  text-align: center;\n  white-space: nowrap;\n  vertical-align: baseline;\n  border-radius: 10px;\n}\n\n.badge-primary { background-color: var(--primary-color); color: white; }\n.badge-secondary { background-color: var(--secondary-color); color: white; }\n.badge-success { background-color: var(--success-color); color: white; }\n.badge-danger { background-color: var(--danger-color); color: white; }\n.badge-warning { background-color: var(--warning-color); color: white; }\n.badge-info { background-color: var(--info-color); color: white; }\n\n/* Mode sombre */\n.dark-mode {\n  --body-bg: #121212;\n  --card-bg: #1e1e1e;\n  --text-primary: #e0e0e0;\n  --text-secondary: #aaaaaa;\n  --border-color: #333333;\n  --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);\n}\n\n.dark-mode .card {\n  background-color: var(--card-bg);\n}\n\n.dark-mode .btn-outline-primary {\n  color: var(--primary-light);\n  border-color: var(--primary-light);\n}\n\n.dark-mode .btn-outline-primary:hover {\n  background-color: var(--primary-color);\n  color: white;\n}\n\n/* Responsive */\n@media (max-width: 992px) {\n  :root {\n    --sidebar-width: 240px;\n  }\n}\n\n@media (max-width: 768px) {\n  .content-area {\n    margin-left: 0;\n    padding: 15px;\n  }\n  \n  .grid-container {\n    grid-template-columns: 1fr;\n  }\n  \n  .card {\n    padding: 15px;\n  }\n}
+/* Styles globaux pour CyberThreat Atlas */
+
+/* Réinitialisation et base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary-color: #0056b3;
+  --primary-light: #0078ff;
+  --primary-dark: #003d82;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #fd7e14;
+  --info-color: #17a2b8;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  --body-bg: #f4f6f9;
+  --card-bg: #ffffff;
+  --text-primary: #333333;
+  --text-secondary: #6c757d;
+  --text-light: #f8f9fa;
+  --border-color: #dee2e6;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --font-primary: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-code: Consolas, Monaco, 'Andale Mono', monospace;
+  --sidebar-width: 280px;
+  --header-height: 64px;
+  --footer-height: 60px;
+  --transition-speed: 0.3s;
+  --border-radius: 5px;
+}
+
+body {
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+  background-color: var(--body-bg);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Conteneur principal */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Zone principale de contenu */
+.app-main {
+  display: flex;
+  flex: 1;
+  padding-top: var(--header-height);
+}
+
+.content-area {
+  flex: 1;
+  padding: 25px;
+  margin-left: var(--sidebar-width);
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  transition: margin-left var(--transition-speed);
+}
+
+.content-expanded {
+  margin-left: 0;
+}
+
+/* Écran de chargement */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--body-bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--border-color);
+  border-top: 5px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Cartes */
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0;
+}
+
+.card-body {
+  padding: 0;
+}
+
+.card-footer {
+  padding-top: 15px;
+  margin-top: 15px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Grilles */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Formulaires */
+input, select, textarea {
+  width: 100%;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-family: var(--font-primary);
+  font-size: 14px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.25);
+}
+
+/* Boutons */
+.btn {
+  display: inline-block;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.475rem 1rem;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: var(--border-radius);
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-primary {
+  color: white;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+.btn-secondary {
+  color: white;
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.btn-success {
+  color: white;
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.btn-danger {
+  color: white;
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  background-color: transparent;
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  color: white;
+  background-color: var(--primary-color);
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.6em;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 10px;
+}
+
+.badge-primary { background-color: var(--primary-color); color: white; }
+.badge-secondary { background-color: var(--secondary-color); color: white; }
+.badge-success { background-color: var(--success-color); color: white; }
+.badge-danger { background-color: var(--danger-color); color: white; }
+.badge-warning { background-color: var(--warning-color); color: white; }
+.badge-info { background-color: var(--info-color); color: white; }
+
+/* Mode sombre */
+.dark-mode {
+  --body-bg: #121212;
+  --card-bg: #1e1e1e;
+  --text-primary: #e0e0e0;
+  --text-secondary: #aaaaaa;
+  --border-color: #333333;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .card {
+  background-color: var(--card-bg);
+}
+
+.dark-mode .btn-outline-primary {
+  color: var(--primary-light);
+  border-color: var(--primary-light);
+}
+
+.dark-mode .btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  :root {
+    --sidebar-width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-area {
+    margin-left: 0;
+    padding: 15px;
+  }
+  
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .card {
+    padding: 15px;
+  }
+}
