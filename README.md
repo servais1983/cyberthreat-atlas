@@ -1,4 +1,5 @@
-![image](https://github.com/user-attachments/files/14671075/cyberthreat-atlas-logo.png)
+![image](https://github.com/user-attachments/assets/e965d9ad-2c1d-4c84-a082-b09e335149b6)
+
 
 # 🌐 CyberThreat Atlas
 
