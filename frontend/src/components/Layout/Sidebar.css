@@ -1,1 +1,223 @@
-.app-sidebar {\n  position: fixed;\n  top: var(--header-height);\n  left: 0;\n  bottom: 0;\n  width: var(--sidebar-width);\n  background-color: var(--card-bg);\n  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);\n  z-index: 990;\n  display: flex;\n  flex-direction: column;\n  transition: all var(--transition-speed);\n  overflow-x: hidden;\n  overflow-y: auto;\n}\n\n.app-sidebar.closed {\n  left: calc(-1 * var(--sidebar-width));\n}\n\n.sidebar-content {\n  flex: 1;\n  padding: 20px 0;\n}\n\n.sidebar-section {\n  margin-bottom: 25px;\n}\n\n.sidebar-heading {\n  font-size: 11px;\n  font-weight: 600;\n  color: var(--text-secondary);\n  text-transform: uppercase;\n  letter-spacing: 1px;\n  padding: 0 20px;\n  margin-bottom: 10px;\n}\n\n.sidebar-menu {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n}\n\n.sidebar-menu li {\n  margin: 2px 0;\n}\n\n.sidebar-menu a,\n.menu-toggle {\n  display: flex;\n  align-items: center;\n  padding: 12px 20px;\n  color: var(--text-primary);\n  text-decoration: none;\n  font-size: 14px;\n  transition: all 0.3s;\n  width: 100%;\n  text-align: left;\n  border: none;\n  background: none;\n  cursor: pointer;\n}\n\n.sidebar-menu a i,\n.menu-toggle i:not(.toggle-icon) {\n  width: 20px;\n  margin-right: 10px;\n  font-size: 16px;\n  text-align: center;\n}\n\n.sidebar-menu a:hover,\n.menu-toggle:hover {\n  background-color: rgba(0, 0, 0, 0.05);\n  color: var(--primary-color);\n}\n\n.sidebar-menu a.active {\n  background-color: rgba(0, 86, 179, 0.1);\n  color: var(--primary-color);\n  border-left: 3px solid var(--primary-color);\n  padding-left: 17px; /* 20px - 3px border */\n  font-weight: 500;\n}\n\n/* Sous-menus */\n.toggle-icon {\n  margin-left: auto;\n  font-size: 10px;\n  transition: transform 0.3s;\n}\n\n.menu-toggle.expanded .toggle-icon {\n  transform: rotate(90deg);\n}\n\n.submenu {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n  max-height: 0;\n  overflow: hidden;\n  transition: max-height 0.3s ease-out;\n}\n\n.submenu.open {\n  max-height: 500px; /* Valeur suffisamment grande pour contenir tous les sous-éléments */\n}\n\n.submenu a {\n  padding-left: 50px;\n  font-size: 13px;\n}\n\n.submenu a.active {\n  padding-left: 47px; /* 50px - 3px border */\n}\n\n/* Pied de la sidebar */\n.sidebar-footer {\n  padding: 15px 20px;\n  border-top: 1px solid var(--border-color);\n  font-size: 12px;\n  color: var(--text-secondary);\n  text-align: center;\n}\n\n/* Mode sombre */\n.dark-mode .app-sidebar {\n  background-color: var(--card-bg);\n  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);\n}\n\n.dark-mode .sidebar-menu a:hover,\n.dark-mode .menu-toggle:hover {\n  background-color: rgba(255, 255, 255, 0.1);\n}\n\n.dark-mode .sidebar-menu a.active {\n  background-color: rgba(0, 120, 255, 0.15);\n  color: var(--primary-light);\n  border-left: 3px solid var(--primary-light);\n}\n\n/* Animation d'ouverture/fermeture */\n@keyframes slideIn {\n  from { left: calc(-1 * var(--sidebar-width)); }\n  to { left: 0; }\n}\n\n@keyframes slideOut {\n  from { left: 0; }\n  to { left: calc(-1 * var(--sidebar-width)); }\n}\n\n/* Responsive */\n@media (max-width: 992px) {\n  .app-sidebar {\n    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);\n  }\n}\n\n@media (max-width: 768px) {\n  .app-sidebar {\n    width: 100%;\n  }\n  \n  .app-sidebar.closed {\n    left: -100%;\n  }\n  \n  .sidebar-menu a, \n  .menu-toggle {\n    padding: 15px 20px;\n  }\n  \n  .sidebar-menu a i, \n  .menu-toggle i:not(.toggle-icon) {\n    font-size: 18px;\n  }\n}
+.app-sidebar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  background-color: var(--card-bg);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+  z-index: 990;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-speed);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.app-sidebar.closed {
+  left: calc(-1 * var(--sidebar-width));
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 20px 0;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  margin: 2px 0;
+}
+
+.nav-link,
+.group-toggle {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.nav-icon {
+  width: 20px;
+  margin-right: 10px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.nav-label {
+  flex: 1;
+}
+
+.expand-icon {
+  margin-left: auto;
+  font-size: 10px;
+  transition: transform 0.3s;
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.nav-link:hover,
+.group-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--primary-color);
+}
+
+.nav-link.active {
+  background-color: rgba(0, 86, 179, 0.1);
+  color: var(--primary-color);
+  border-left: 3px solid var(--primary-color);
+  padding-left: 17px;
+  font-weight: 500;
+}
+
+.group-toggle.active {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* Sous-menus */
+.nav-group {
+  width: 100%;
+}
+
+.nav-submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.nav-subitem {
+  margin: 0;
+}
+
+.nav-sublink {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px 10px 50px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.3s;
+}
+
+.nav-sublink:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--primary-color);
+}
+
+.nav-sublink.active {
+  background-color: rgba(0, 86, 179, 0.1);
+  color: var(--primary-color);
+  border-left: 3px solid var(--primary-color);
+  padding-left: 47px;
+  font-weight: 500;
+}
+
+/* Pied de la sidebar */
+.sidebar-footer {
+  padding: 15px 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar-small {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.user-role {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* Mode sombre */
+.dark-mode .app-sidebar {
+  background-color: var(--card-bg);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .nav-link:hover,
+.dark-mode .group-toggle:hover,
+.dark-mode .nav-sublink:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .nav-link.active,
+.dark-mode .nav-sublink.active {
+  background-color: rgba(0, 120, 255, 0.15);
+  color: var(--primary-light);
+  border-left: 3px solid var(--primary-light);
+}
+
+.dark-mode .nav-submenu {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .app-sidebar {
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-sidebar {
+    width: 100%;
+  }
+  
+  .app-sidebar.closed {
+    left: -100%;
+  }
+  
+  .nav-link, 
+  .group-toggle,
+  .nav-sublink {
+    padding: 15px 20px;
+  }
+  
+  .nav-sublink {
+    padding-left: 50px;
+  }
+  
+  .nav-icon {
+    font-size: 18px;
+  }
+}
