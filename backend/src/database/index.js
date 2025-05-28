@@ -1,1 +1,47 @@
-/**\n * Configuration de la connexion à MongoDB\n */\nconst mongoose = require('mongoose');\nconst config = require('../config');\n\n// Options de configuration pour Mongoose\nconst options = {\n  useNewUrlParser: true,\n  useUnifiedTopology: true,\n  serverSelectionTimeoutMS: 5000, // Timeout après 5s si impossible de se connecter\n  autoIndex: process.env.NODE_ENV !== 'production', // Désactiver l'auto-indexation en production\n};\n\n// Fonction pour établir la connexion à MongoDB\nconst connectDB = async () => {\n  try {\n    const conn = await mongoose.connect(config.mongoURI, options);\n    console.log(`MongoDB connecté: ${conn.connection.host}`);\n    return conn;\n  } catch (error) {\n    console.error(`Erreur de connexion à MongoDB: ${error.message}`);\n    process.exit(1); // Quitter l'application en cas d'échec de connexion\n  }\n};\n\n// Gestion des événements de connexion\nmongoose.connection.on('connected', () => {\n  console.log('Mongoose connecté à MongoDB');\n});\n\nmongoose.connection.on('error', (err) => {\n  console.error(`Erreur de connexion Mongoose: ${err.message}`);\n});\n\nmongoose.connection.on('disconnected', () => {\n  console.log('Mongoose déconnecté de MongoDB');\n});\n\n// Fermeture propre de la connexion lors de l'arrêt de l'application\nprocess.on('SIGINT', async () => {\n  await mongoose.connection.close();\n  console.log('Connexion Mongoose fermée suite à l\\'arrêt de l\\'application');\n  process.exit(0);\n});\n\nmodule.exports = connectDB;
+/**
+ * Configuration de la connexion à MongoDB
+ */
+const mongoose = require('mongoose');
+const config = require('../config');
+
+// Options de configuration pour Mongoose
+const options = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000, // Timeout après 5s si impossible de se connecter
+  autoIndex: process.env.NODE_ENV !== 'production', // Désactiver l'auto-indexation en production
+};
+
+// Fonction pour établir la connexion à MongoDB
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(config.mongoURI, options);
+    console.log(`MongoDB connecté: ${conn.connection.host}`);
+    return conn;
+  } catch (error) {
+    console.error(`Erreur de connexion à MongoDB: ${error.message}`);
+    process.exit(1); // Quitter l'application en cas d'échec de connexion
+  }
+};
+
+// Gestion des événements de connexion
+mongoose.connection.on('connected', () => {
+  console.log('Mongoose connecté à MongoDB');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error(`Erreur de connexion Mongoose: ${err.message}`);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('Mongoose déconnecté de MongoDB');
+});
+
+// Fermeture propre de la connexion lors de l'arrêt de l'application
+process.on('SIGINT', async () => {
+  await mongoose.connection.close();
+  console.log('Connexion Mongoose fermée suite à l\'arrêt de l\'application');
+  process.exit(0);
+});
+
+module.exports = connectDB;
