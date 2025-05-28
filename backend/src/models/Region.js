@@ -1,1 +1,122 @@
-const mongoose = require('mongoose');\n\n/**\n * Modèle Mongoose pour les régions géographiques\n */\nconst RegionSchema = new mongoose.Schema({\n  name: {\n    type: String,\n    required: true,\n    unique: true,\n    trim: true\n  },\n  countries: [{\n    type: String,\n    trim: true\n  }],\n  threatLevel: {\n    type: String,\n    enum: ['Low', 'Medium', 'High', 'Critical'],\n    default: 'Medium'\n  },\n  activeThreats: [{\n    type: String,\n    trim: true\n  }],\n  commonTargets: [{\n    type: String,\n    trim: true\n  }],\n  recentCampaigns: [{\n    type: String,\n    trim: true\n  }],\n  createdAt: {\n    type: Date,\n    default: Date.now\n  },\n  updatedAt: {\n    type: Date,\n    default: Date.now\n  }\n}, {\n  timestamps: true\n});\n\n// Middleware pour mettre à jour la date de dernière modification\nRegionSchema.pre('save', function(next) {\n  this.updatedAt = Date.now();\n  next();\n});\n\n// Méthode pour obtenir les groupes d'attaque ciblant cette région\nRegionSchema.methods.getAttackGroups = async function() {\n  const AttackGroup = mongoose.model('AttackGroup');\n  \n  // Recherche directe dans les activeThreats de cette région\n  const directGroups = await AttackGroup.find({ \n    name: { $in: this.activeThreats } \n  });\n  \n  // Recherche des groupes qui mentionnent cette région dans leurs cibles\n  const indirectGroups = await AttackGroup.find({ \n    targetRegions: this.name,\n    name: { $nin: this.activeThreats } // Éviter les doublons\n  });\n  \n  // Recherche des groupes qui ciblent des pays de cette région\n  let countryGroups = [];\n  if (this.countries && this.countries.length > 0) {\n    // Supposons que countryOfOrigin contient le code ISO à deux lettres du pays\n    countryGroups = await AttackGroup.find({\n      countryOfOrigin: { $in: this.countries },\n      name: { $nin: [...this.activeThreats, ...indirectGroups.map(g => g.name)] } // Éviter les doublons\n    });\n  }\n  \n  // Combiner les résultats\n  return [...directGroups, ...indirectGroups, ...countryGroups];\n};\n\n// Méthode pour obtenir les campagnes ciblant cette région ou ses pays\nRegionSchema.methods.getCampaigns = async function() {\n  const Campaign = mongoose.model('Campaign');\n  \n  // Campagnes mentionnant directement cette région (via recentCampaigns)\n  const directCampaigns = await Campaign.find({ \n    name: { $in: this.recentCampaigns } \n  });\n  \n  // Campagnes ciblant des pays de cette région\n  let countryCampaigns = [];\n  if (this.countries && this.countries.length > 0) {\n    countryCampaigns = await Campaign.find({\n      targetCountries: { $in: this.countries },\n      name: { $nin: this.recentCampaigns } // Éviter les doublons\n    });\n  }\n  \n  // Combiner les résultats\n  return [...directCampaigns, ...countryCampaigns];\n};\n\n// Méthode statique pour obtenir la liste de tous les pays\nRegionSchema.statics.getAllCountries = async function() {\n  // Cette méthode retourne la liste complète des pays uniques mentionnés dans toutes les régions\n  const regions = await this.find({});\n  \n  // Extraire tous les codes pays uniques\n  const countries = new Set();\n  regions.forEach(region => {\n    if (region.countries && region.countries.length > 0) {\n      region.countries.forEach(country => countries.add(country));\n    }\n  });\n  \n  // Convertir en tableau\n  return Array.from(countries).sort();\n};\n\nconst Region = mongoose.model('Region', RegionSchema);\n\nmodule.exports = Region;
+const mongoose = require('mongoose');
+
+/**
+ * Modèle Mongoose pour les régions géographiques
+ */
+const RegionSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  countries: [{
+    type: String,
+    trim: true
+  }],
+  threatLevel: {
+    type: String,
+    enum: ['Low', 'Medium', 'High', 'Critical'],
+    default: 'Medium'
+  },
+  activeThreats: [{
+    type: String,
+    trim: true
+  }],
+  commonTargets: [{
+    type: String,
+    trim: true
+  }],
+  recentCampaigns: [{
+    type: String,
+    trim: true
+  }],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+}, {
+  timestamps: true
+});
+
+// Middleware pour mettre à jour la date de dernière modification
+RegionSchema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+// Méthode pour obtenir les groupes d'attaque ciblant cette région
+RegionSchema.methods.getAttackGroups = async function() {
+  const AttackGroup = mongoose.model('AttackGroup');
+  
+  // Recherche directe dans les activeThreats de cette région
+  const directGroups = await AttackGroup.find({ 
+    name: { $in: this.activeThreats } 
+  });
+  
+  // Recherche des groupes qui mentionnent cette région dans leurs cibles
+  const indirectGroups = await AttackGroup.find({ 
+    targetRegions: this.name,
+    name: { $nin: this.activeThreats } // Éviter les doublons
+  });
+  
+  // Recherche des groupes qui ciblent des pays de cette région
+  let countryGroups = [];
+  if (this.countries && this.countries.length > 0) {
+    // Supposons que countryOfOrigin contient le code ISO à deux lettres du pays
+    countryGroups = await AttackGroup.find({
+      countryOfOrigin: { $in: this.countries },
+      name: { $nin: [...this.activeThreats, ...indirectGroups.map(g => g.name)] } // Éviter les doublons
+    });
+  }
+  
+  // Combiner les résultats
+  return [...directGroups, ...indirectGroups, ...countryGroups];
+};
+
+// Méthode pour obtenir les campagnes ciblant cette région ou ses pays
+RegionSchema.methods.getCampaigns = async function() {
+  const Campaign = mongoose.model('Campaign');
+  
+  // Campagnes mentionnant directement cette région (via recentCampaigns)
+  const directCampaigns = await Campaign.find({ 
+    name: { $in: this.recentCampaigns } 
+  });
+  
+  // Campagnes ciblant des pays de cette région
+  let countryCampaigns = [];
+  if (this.countries && this.countries.length > 0) {
+    countryCampaigns = await Campaign.find({
+      targetCountries: { $in: this.countries },
+      name: { $nin: this.recentCampaigns } // Éviter les doublons
+    });
+  }
+  
+  // Combiner les résultats
+  return [...directCampaigns, ...countryCampaigns];
+};
+
+// Méthode statique pour obtenir la liste de tous les pays
+RegionSchema.statics.getAllCountries = async function() {
+  // Cette méthode retourne la liste complète des pays uniques mentionnés dans toutes les régions
+  const regions = await this.find({});
+  
+  // Extraire tous les codes pays uniques
+  const countries = new Set();
+  regions.forEach(region => {
+    if (region.countries && region.countries.length > 0) {
+      region.countries.forEach(country => countries.add(country));
+    }
+  });
+  
+  // Convertir en tableau
+  return Array.from(countries).sort();
+};
+
+const Region = mongoose.model('Region', RegionSchema);
+
+module.exports = Region;

@@ -1,1 +1,148 @@
-const mongoose = require('mongoose');\n\n/**\n * Modèle Mongoose pour les indicateurs de compromission (IoCs)\n */\nconst IndicatorSchema = new mongoose.Schema({\n  type: {\n    type: String,\n    enum: ['IP', 'Domain', 'Hash', 'URL', 'Email', 'FilePath', 'Registry', 'Other'],\n    required: true\n  },\n  value: {\n    type: String,\n    required: true,\n    trim: true\n  },\n  description: {\n    type: String\n  },\n  firstSeen: {\n    type: Date\n  },\n  lastSeen: {\n    type: Date\n  },\n  campaigns: [{\n    type: String,\n    trim: true\n  }],\n  malware: [{\n    type: String,\n    trim: true\n  }],\n  confidence: {\n    type: String,\n    enum: ['Low', 'Medium', 'High'],\n    default: 'Medium'\n  },\n  status: {\n    type: String,\n    enum: ['Active', 'Inactive', 'False Positive'],\n    default: 'Active'\n  },\n  references: [{\n    url: {\n      type: String,\n      required: true\n    },\n    source: {\n      type: String,\n      required: true\n    }\n  }],\n  createdAt: {\n    type: Date,\n    default: Date.now\n  },\n  updatedAt: {\n    type: Date,\n    default: Date.now\n  }\n}, {\n  timestamps: true\n});\n\n// Index unique sur la combinaison de type et valeur\nIndicatorSchema.index({ type: 1, value: 1 }, { unique: true });\n\n// Index pour les recherches par campagne ou malware\nIndicatorSchema.index({ campaigns: 1 });\nIndicatorSchema.index({ malware: 1 });\nIndicatorSchema.index({ status: 1 });\n\n// Middleware pour mettre à jour la date de dernière modification\nIndicatorSchema.pre('save', function(next) {\n  this.updatedAt = Date.now();\n  next();\n});\n\n// Méthode pour obtenir les détails complets des campagnes associées\nIndicatorSchema.methods.getCampaigns = async function() {\n  const Campaign = mongoose.model('Campaign');\n  return await Campaign.find({ name: { $in: this.campaigns } });\n};\n\n// Méthode pour obtenir les détails complets des malwares associés\nIndicatorSchema.methods.getMalware = async function() {\n  const Malware = mongoose.model('Malware');\n  return await Malware.find({ name: { $in: this.malware } });\n};\n\n// Méthode statique pour trouver les indicateurs actifs\nIndicatorSchema.statics.findActive = function() {\n  return this.find({ status: 'Active' });\n};\n\n// Méthode statique pour trouver les indicateurs récents (dans les X derniers jours)\nIndicatorSchema.statics.findRecent = function(days = 30) {\n  const cutoffDate = new Date();\n  cutoffDate.setDate(cutoffDate.getDate() - days);\n  \n  return this.find({\n    $or: [\n      { firstSeen: { $gte: cutoffDate } },\n      { lastSeen: { $gte: cutoffDate } }\n    ]\n  }).sort('-lastSeen');\n};\n\n// Méthode statique pour valider un indicateur en fonction de son type\nIndicatorSchema.statics.validateValue = function(type, value) {\n  switch (type) {\n    case 'IP':\n      // Validation basique d'adresse IP (IPv4 ou IPv6)\n      return /^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$/.test(value) || /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/.test(value);\n    \n    case 'Domain':\n      // Validation basique de nom de domaine\n      return /^[a-zA-Z0-9][-a-zA-Z0-9]+\\.[a-zA-Z0-9][-a-zA-Z0-9\\.]+$/.test(value);\n    \n    case 'Hash':\n      // Validation pour MD5, SHA1, ou SHA256\n      return /^[a-fA-F0-9]{32}$/.test(value) || // MD5\n             /^[a-fA-F0-9]{40}$/.test(value) || // SHA1\n             /^[a-fA-F0-9]{64}$/.test(value);   // SHA256\n    \n    case 'URL':\n      // Validation basique d'URL\n      try {\n        new URL(value);\n        return true;\n      } catch (e) {\n        return false;\n      }\n    \n    case 'Email':\n      // Validation basique d'email\n      return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);\n    \n    default:\n      // Pour les autres types, on accepte toute valeur non vide\n      return value && value.trim().length > 0;\n  }\n};\n\nconst Indicator = mongoose.model('Indicator', IndicatorSchema);\n\nmodule.exports = Indicator;
+const mongoose = require('mongoose');
+
+/**
+ * Modèle Mongoose pour les indicateurs de compromission (IoCs)
+ */
+const IndicatorSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['IP', 'Domain', 'Hash', 'URL', 'Email', 'FilePath', 'Registry', 'Other'],
+    required: true
+  },
+  value: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  description: {
+    type: String
+  },
+  firstSeen: {
+    type: Date
+  },
+  lastSeen: {
+    type: Date
+  },
+  campaigns: [{
+    type: String,
+    trim: true
+  }],
+  malware: [{
+    type: String,
+    trim: true
+  }],
+  confidence: {
+    type: String,
+    enum: ['Low', 'Medium', 'High'],
+    default: 'Medium'
+  },
+  status: {
+    type: String,
+    enum: ['Active', 'Inactive', 'False Positive'],
+    default: 'Active'
+  },
+  references: [{
+    url: {
+      type: String,
+      required: true
+    },
+    source: {
+      type: String,
+      required: true
+    }
+  }],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+}, {
+  timestamps: true
+});
+
+// Index unique sur la combinaison de type et valeur
+IndicatorSchema.index({ type: 1, value: 1 }, { unique: true });
+
+// Index pour les recherches par campagne ou malware
+IndicatorSchema.index({ campaigns: 1 });
+IndicatorSchema.index({ malware: 1 });
+IndicatorSchema.index({ status: 1 });
+
+// Middleware pour mettre à jour la date de dernière modification
+IndicatorSchema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+// Méthode pour obtenir les détails complets des campagnes associées
+IndicatorSchema.methods.getCampaigns = async function() {
+  const Campaign = mongoose.model('Campaign');
+  return await Campaign.find({ name: { $in: this.campaigns } });
+};
+
+// Méthode pour obtenir les détails complets des malwares associés
+IndicatorSchema.methods.getMalware = async function() {
+  const Malware = mongoose.model('Malware');
+  return await Malware.find({ name: { $in: this.malware } });
+};
+
+// Méthode statique pour trouver les indicateurs actifs
+IndicatorSchema.statics.findActive = function() {
+  return this.find({ status: 'Active' });
+};
+
+// Méthode statique pour trouver les indicateurs récents (dans les X derniers jours)
+IndicatorSchema.statics.findRecent = function(days = 30) {
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - days);
+  
+  return this.find({
+    $or: [
+      { firstSeen: { $gte: cutoffDate } },
+      { lastSeen: { $gte: cutoffDate } }
+    ]
+  }).sort('-lastSeen');
+};
+
+// Méthode statique pour valider un indicateur en fonction de son type
+IndicatorSchema.statics.validateValue = function(type, value) {
+  switch (type) {
+    case 'IP':
+      // Validation basique d'adresse IP (IPv4 ou IPv6)
+      return /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(value) || /^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/.test(value);
+    
+    case 'Domain':
+      // Validation basique de nom de domaine
+      return /^[a-zA-Z0-9][-a-zA-Z0-9]+\.[a-zA-Z0-9][-a-zA-Z0-9\.]+$/.test(value);
+    
+    case 'Hash':
+      // Validation pour MD5, SHA1, ou SHA256
+      return /^[a-fA-F0-9]{32}$/.test(value) || // MD5
+             /^[a-fA-F0-9]{40}$/.test(value) || // SHA1
+             /^[a-fA-F0-9]{64}$/.test(value);   // SHA256
+    
+    case 'URL':
+      // Validation basique d'URL
+      try {
+        new URL(value);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    
+    case 'Email':
+      // Validation basique d'email
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    
+    default:
+      // Pour les autres types, on accepte toute valeur non vide
+      return value && value.trim().length > 0;
+  }
+};
+
+const Indicator = mongoose.model('Indicator', IndicatorSchema);
+
+module.exports = Indicator;

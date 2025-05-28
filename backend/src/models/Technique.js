@@ -1,1 +1,125 @@
-const mongoose = require('mongoose');\n\n/**\n * Modèle Mongoose pour les techniques d'attaque (basé sur MITRE ATT&CK)\n */\nconst TechniqueSchema = new mongoose.Schema({\n  mitreId: {\n    type: String,\n    required: true,\n    unique: true,\n    trim: true\n  },\n  name: {\n    type: String,\n    required: true,\n    trim: true\n  },\n  description: {\n    type: String\n  },\n  tactics: [{\n    type: String,\n    trim: true\n  }],\n  platforms: [{\n    type: String,\n    trim: true\n  }],\n  dataSources: [{\n    type: String,\n    trim: true\n  }],\n  mitigations: [{\n    type: String,\n    trim: true\n  }],\n  detectionMethods: {\n    type: String\n  },\n  references: [{\n    url: {\n      type: String,\n      required: true\n    },\n    source: {\n      type: String,\n      required: true\n    },\n    description: {\n      type: String\n    }\n  }],\n  severity: {\n    type: String,\n    enum: ['Low', 'Medium', 'High'],\n    default: 'Medium'\n  },\n  createdAt: {\n    type: Date,\n    default: Date.now\n  },\n  updatedAt: {\n    type: Date,\n    default: Date.now\n  }\n}, {\n  timestamps: true\n});\n\n// Index pour les recherches textuelles\nTechniqueSchema.index({ \n  name: 'text', \n  description: 'text',\n  mitreId: 'text'\n});\n\n// Middleware pour mettre à jour la date de dernière modification\nTechniqueSchema.pre('save', function(next) {\n  this.updatedAt = Date.now();\n  next();\n});\n\n// Méthode pour obtenir les groupes utilisant cette technique\nTechniqueSchema.methods.getAttackGroups = async function() {\n  const Campaign = mongoose.model('Campaign');\n  const AttackGroup = mongoose.model('AttackGroup');\n  \n  // Trouver toutes les campagnes utilisant cette technique\n  const campaigns = await Campaign.find({ techniques: this.mitreId });\n  \n  // Extraire tous les noms de groupes uniques\n  const groupNames = [...new Set(\n    campaigns.flatMap(campaign => campaign.attackGroups)\n  )];\n  \n  // Récupérer les détails des groupes\n  return await AttackGroup.find({ name: { $in: groupNames } });\n};\n\n// Méthode pour obtenir les campagnes utilisant cette technique\nTechniqueSchema.methods.getCampaigns = async function() {\n  const Campaign = mongoose.model('Campaign');\n  return await Campaign.find({ techniques: this.mitreId });\n};\n\n// Méthode pour obtenir les malwares associés à cette technique\nTechniqueSchema.methods.getRelatedMalware = async function() {\n  const Campaign = mongoose.model('Campaign');\n  const Malware = mongoose.model('Malware');\n  \n  // Trouver toutes les campagnes utilisant cette technique\n  const campaigns = await Campaign.find({ techniques: this.mitreId });\n  \n  // Extraire tous les noms de malwares uniques\n  const malwareNames = [...new Set(\n    campaigns.flatMap(campaign => campaign.malware)\n  )];\n  \n  // Récupérer les détails des malwares\n  return await Malware.find({ name: { $in: malwareNames } });\n};\n\nconst Technique = mongoose.model('Technique', TechniqueSchema);\n\nmodule.exports = Technique;
+const mongoose = require('mongoose');
+
+/**
+ * Modèle Mongoose pour les techniques d'attaque (basé sur MITRE ATT&CK)
+ */
+const TechniqueSchema = new mongoose.Schema({
+  mitreId: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  description: {
+    type: String
+  },
+  tactics: [{
+    type: String,
+    trim: true
+  }],
+  platforms: [{
+    type: String,
+    trim: true
+  }],
+  dataSources: [{
+    type: String,
+    trim: true
+  }],
+  mitigations: [{
+    type: String,
+    trim: true
+  }],
+  detectionMethods: {
+    type: String
+  },
+  references: [{
+    url: {
+      type: String,
+      required: true
+    },
+    source: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String
+    }
+  }],
+  severity: {
+    type: String,
+    enum: ['Low', 'Medium', 'High'],
+    default: 'Medium'
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+}, {
+  timestamps: true
+});
+
+// Index pour les recherches textuelles
+TechniqueSchema.index({ 
+  name: 'text', 
+  description: 'text',
+  mitreId: 'text'
+});
+
+// Middleware pour mettre à jour la date de dernière modification
+TechniqueSchema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+// Méthode pour obtenir les groupes utilisant cette technique
+TechniqueSchema.methods.getAttackGroups = async function() {
+  const Campaign = mongoose.model('Campaign');
+  const AttackGroup = mongoose.model('AttackGroup');
+  
+  // Trouver toutes les campagnes utilisant cette technique
+  const campaigns = await Campaign.find({ techniques: this.mitreId });
+  
+  // Extraire tous les noms de groupes uniques
+  const groupNames = [...new Set(
+    campaigns.flatMap(campaign => campaign.attackGroups)
+  )];
+  
+  // Récupérer les détails des groupes
+  return await AttackGroup.find({ name: { $in: groupNames } });
+};
+
+// Méthode pour obtenir les campagnes utilisant cette technique
+TechniqueSchema.methods.getCampaigns = async function() {
+  const Campaign = mongoose.model('Campaign');
+  return await Campaign.find({ techniques: this.mitreId });
+};
+
+// Méthode pour obtenir les malwares associés à cette technique
+TechniqueSchema.methods.getRelatedMalware = async function() {
+  const Campaign = mongoose.model('Campaign');
+  const Malware = mongoose.model('Malware');
+  
+  // Trouver toutes les campagnes utilisant cette technique
+  const campaigns = await Campaign.find({ techniques: this.mitreId });
+  
+  // Extraire tous les noms de malwares uniques
+  const malwareNames = [...new Set(
+    campaigns.flatMap(campaign => campaign.malware)
+  )];
+  
+  // Récupérer les détails des malwares
+  return await Malware.find({ name: { $in: malwareNames } });
+};
+
+const Technique = mongoose.model('Technique', TechniqueSchema);
+
+module.exports = Technique;

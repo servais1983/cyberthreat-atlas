@@ -1,1 +1,104 @@
-const mongoose = require('mongoose');\n\n/**\n * Modèle Mongoose pour les secteurs d'activité\n */\nconst SectorSchema = new mongoose.Schema({\n  name: {\n    type: String,\n    required: true,\n    unique: true,\n    trim: true\n  },\n  description: {\n    type: String\n  },\n  commonVulnerabilities: [{\n    type: String,\n    trim: true\n  }],\n  commonAttackVectors: [{\n    type: String,\n    trim: true\n  }],\n  threatGroups: [{\n    type: String,\n    trim: true\n  }],\n  recommendedControls: [{\n    type: String,\n    trim: true\n  }],\n  createdAt: {\n    type: Date,\n    default: Date.now\n  },\n  updatedAt: {\n    type: Date,\n    default: Date.now\n  }\n}, {\n  timestamps: true\n});\n\n// Middleware pour mettre à jour la date de dernière modification\nSectorSchema.pre('save', function(next) {\n  this.updatedAt = Date.now();\n  next();\n});\n\n// Méthode pour obtenir les groupes d'attaque ciblant ce secteur\nSectorSchema.methods.getAttackGroups = async function() {\n  const AttackGroup = mongoose.model('AttackGroup');\n  \n  // Recherche directe dans les threatGroups de ce secteur\n  const directGroups = await AttackGroup.find({ \n    name: { $in: this.threatGroups } \n  });\n  \n  // Recherche des groupes qui mentionnent ce secteur dans leurs cibles\n  const indirectGroups = await AttackGroup.find({ \n    targetSectors: this.name,\n    name: { $nin: this.threatGroups } // Éviter les doublons\n  });\n  \n  // Combiner les résultats\n  return [...directGroups, ...indirectGroups];\n};\n\n// Méthode pour obtenir les campagnes ciblant ce secteur\nSectorSchema.methods.getCampaigns = async function() {\n  const Campaign = mongoose.model('Campaign');\n  return await Campaign.find({ targetSectors: this.name });\n};\n\n// Méthode pour obtenir les techniques fréquemment utilisées contre ce secteur\nSectorSchema.methods.getCommonTechniques = async function() {\n  const Campaign = mongoose.model('Campaign');\n  const Technique = mongoose.model('Technique');\n  \n  // Trouver toutes les campagnes ciblant ce secteur\n  const campaigns = await Campaign.find({ targetSectors: this.name });\n  \n  // Extraire tous les IDs de techniques et leur fréquence\n  const techniquesCount = {};\n  campaigns.forEach(campaign => {\n    campaign.techniques.forEach(technique => {\n      techniquesCount[technique] = (techniquesCount[technique] || 0) + 1;\n    });\n  });\n  \n  // Convertir en tableau et trier par fréquence\n  const sortedTechniques = Object.entries(techniquesCount)\n    .sort((a, b) => b[1] - a[1])\n    .map(entry => entry[0]);\n  \n  // Récupérer les détails des techniques (limité aux 20 plus fréquentes)\n  return await Technique.find({ \n    mitreId: { $in: sortedTechniques.slice(0, 20) } \n  });\n};\n\nconst Sector = mongoose.model('Sector', SectorSchema);\n\nmodule.exports = Sector;
+const mongoose = require('mongoose');
+
+/**
+ * Modèle Mongoose pour les secteurs d'activité
+ */
+const SectorSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  description: {
+    type: String
+  },
+  commonVulnerabilities: [{
+    type: String,
+    trim: true
+  }],
+  commonAttackVectors: [{
+    type: String,
+    trim: true
+  }],
+  threatGroups: [{
+    type: String,
+    trim: true
+  }],
+  recommendedControls: [{
+    type: String,
+    trim: true
+  }],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+}, {
+  timestamps: true
+});
+
+// Middleware pour mettre à jour la date de dernière modification
+SectorSchema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+// Méthode pour obtenir les groupes d'attaque ciblant ce secteur
+SectorSchema.methods.getAttackGroups = async function() {
+  const AttackGroup = mongoose.model('AttackGroup');
+  
+  // Recherche directe dans les threatGroups de ce secteur
+  const directGroups = await AttackGroup.find({ 
+    name: { $in: this.threatGroups } 
+  });
+  
+  // Recherche des groupes qui mentionnent ce secteur dans leurs cibles
+  const indirectGroups = await AttackGroup.find({ 
+    targetSectors: this.name,
+    name: { $nin: this.threatGroups } // Éviter les doublons
+  });
+  
+  // Combiner les résultats
+  return [...directGroups, ...indirectGroups];
+};
+
+// Méthode pour obtenir les campagnes ciblant ce secteur
+SectorSchema.methods.getCampaigns = async function() {
+  const Campaign = mongoose.model('Campaign');
+  return await Campaign.find({ targetSectors: this.name });
+};
+
+// Méthode pour obtenir les techniques fréquemment utilisées contre ce secteur
+SectorSchema.methods.getCommonTechniques = async function() {
+  const Campaign = mongoose.model('Campaign');
+  const Technique = mongoose.model('Technique');
+  
+  // Trouver toutes les campagnes ciblant ce secteur
+  const campaigns = await Campaign.find({ targetSectors: this.name });
+  
+  // Extraire tous les IDs de techniques et leur fréquence
+  const techniquesCount = {};
+  campaigns.forEach(campaign => {
+    campaign.techniques.forEach(technique => {
+      techniquesCount[technique] = (techniquesCount[technique] || 0) + 1;
+    });
+  });
+  
+  // Convertir en tableau et trier par fréquence
+  const sortedTechniques = Object.entries(techniquesCount)
+    .sort((a, b) => b[1] - a[1])
+    .map(entry => entry[0]);
+  
+  // Récupérer les détails des techniques (limité aux 20 plus fréquentes)
+  return await Technique.find({ 
+    mitreId: { $in: sortedTechniques.slice(0, 20) } 
+  });
+};
+
+const Sector = mongoose.model('Sector', SectorSchema);
+
+module.exports = Sector;
