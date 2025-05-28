@@ -20,7 +20,6 @@ services:
       timeout: 10s
       retries: 5
       start_period: 40s
-
   # Service pour le backend (API)
   backend:
     build: 
@@ -40,9 +39,10 @@ services:
       - CORS_ORIGIN=http://localhost:3000
     ports:
       - "5000:5000"
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
+    # Volumes commentés pour éviter d'écraser les fichiers corrigés
+    # volumes:
+    #   - ./backend:/app
+    #   - /app/node_modules
     networks:
       - cyberthreat-network
     healthcheck:
@@ -51,7 +51,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-
   # Service pour le frontend
   frontend:
     build: 
@@ -68,9 +67,10 @@ services:
       - GENERATE_SOURCEMAP=false
     ports:
       - "3000:3000"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+    # Volumes commentés pour éviter d'écraser les fichiers corrigés
+    # volumes:
+    #   - ./frontend:/app
+    #   - /app/node_modules
     networks:
       - cyberthreat-network
     healthcheck:
@@ -79,11 +79,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-
 networks:
   cyberthreat-network:
     driver: bridge
-
 volumes:
   mongo-data:
     driver: local
