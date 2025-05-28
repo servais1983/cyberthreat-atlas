@@ -1,8 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 
 // Création du contexte d'authentification
-export const AuthContext = createContext({
+const AuthContext = createContext({
   user: null,
   isAuthenticated: false,
   isLoading: true,
@@ -24,14 +23,12 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // Changé à false pour éviter les appels API
   
-  // Fonction pour définir le token dans le local storage et les headers d'Axios
+  // Fonction pour définir le token dans le local storage
   const setToken = (token) => {
     if (token) {
       localStorage.setItem('token', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } else {
       localStorage.removeItem('token');
-      delete axios.defaults.headers.common['Authorization'];
     }
   };
   
@@ -208,4 +205,6 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
+// Export du contexte
+export { AuthContext };
 export default AuthContext;
