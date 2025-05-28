@@ -19,6 +19,7 @@ const connectDB = require('./database');
 const authRoutes = require('./routes/auth');
 const attackGroupRoutes = require('./routes/attackGroups');
 const campaignRoutes = require('./routes/campaigns');
+const healthRoutes = require('./routes/health');
 
 // Création de l'application Express
 const app = express();
@@ -62,6 +63,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/attack-groups', attackGroupRoutes);
 app.use('/api/v1/campaigns', campaignRoutes);
+app.use('/api/v1/health', healthRoutes);
 
 // Middleware de gestion des erreurs 404 (routes non trouvées)
 app.use((req, res, next) => {
