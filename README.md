@@ -1,130 +1,52 @@
-![image](https://github.com/user-attachments/assets/6f9948e3-ac11-4a52-a940-d8408bdf7ac1)
+![image](https://github.com/user-attachments/files/14671075/cyberthreat-atlas-logo.png)
 
-<!-- Badges professionnels -->
-<p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="Version">
-  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
-  <img src="https://img.shields.io/badge/threat-intelligence-red.svg" alt="Threat Intelligence">
-  <img src="https://img.shields.io/badge/platform-web%20%7C%20docker-lightgrey.svg" alt="Platform">
-</p>
+# 🌐 CyberThreat Atlas
 
-<p align="center">
-  <img src="https://img.shields.io/badge/MITRE-ATT%26CK%20Framework-orange.svg" alt="MITRE ATT&CK">
-  <img src="https://img.shields.io/badge/Node.js-18%2B-brightgreen.svg" alt="Node.js">
-  <img src="https://img.shields.io/badge/React-18-blue.svg" alt="React">
-  <img src="https://img.shields.io/badge/MongoDB-5%2B-green.svg" alt="MongoDB">
-</p>
+Une plateforme complète de cartographie et d'analyse des menaces cyber mondiales, permettant de visualiser, suivre et comprendre les acteurs malveillants, leurs techniques et leurs campagnes d'attaque.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/OSINT-enabled-blueviolet.svg" alt="OSINT">
-  <img src="https://img.shields.io/badge/geolocation-mapping-success.svg" alt="Geolocation">
-  <img src="https://img.shields.io/badge/real--time-analysis-critical.svg" alt="Real-time">
-</p>
+## 🔍 Fonctionnalités
 
-<p align="center">
-  <img src="https://img.shields.io/badge/maintained-yes-green.svg" alt="Maintenance">
-  <img src="https://img.shields.io/badge/last%20update-mai%202025-brightgreen.svg" alt="Last Update">
-  <img src="https://img.shields.io/badge/contributors-welcome-brightgreen.svg" alt="Contributors">
-  <img src="https://img.shields.io/badge/docs-comprehensive-blue.svg" alt="Documentation">
-</p>
+- **🗺️ Carte Interactive** - Visualisation géographique des menaces et attaques
+- **👥 Profils d'Acteurs** - Base de données détaillée des groupes APT et acteurs malveillants
+- **⚔️ Techniques & Tactiques** - Mapping avec le framework MITRE ATT&CK
+- **⏱️ Timeline** - Chronologie interactive des campagnes d'attaque
+- **📊 Tableaux de Bord** - Statistiques et métriques sur les menaces actuelles
+- **🔍 Recherche Avancée** - Filtrage multicritères des données de menaces
+- **📱 Responsive Design** - Interface adaptée à tous les appareils
 
-# 🛡️ CyberThreat Atlas
+## 🛠️ Technologies
 
-Un atlas professionnel des cybermenaces pour les analystes en sécurité, offrant une visualisation avancée et une analyse des menaces cyber à l'échelle mondiale.
-
-## ⚡ Fonctionnalités Principales
-
-### 🗺️ Cartographie Interactive
-- 🌍 Visualisation mondiale des menaces avec géolocalisation précise
-- 🔄 Représentation des flux d'attaques (origine → destination)
-- 🔍 Filtrage par type de menace, secteur, intensité
-- 📊 Modes de visualisation multiples (marqueurs, carte de chaleur, flux)
-
-### 🎯 Analyse des Acteurs Malveillants
-- 👥 Profils détaillés des groupes d'attaque
-- 🛠️ Techniques et tactiques utilisées (MITRE ATT&CK)
-- 📜 Historique des campagnes et évolution des méthodes
-- 🕸️ Graphe de relations entre acteurs et techniques
-
-### ⏰ Timeline des Campagnes
-- 📅 Chronologie interactive des campagnes d'attaque
-- 🔗 Corrélation temporelle entre événements
-- 🎛️ Filtrage par période et type d'événement
-- 📈 Analyse des tendances et patterns
-
-### 📊 Dashboards Analytiques
-- 📋 Métriques clés et indicateurs de sécurité
-- 📈 Visualisations synthétiques (graphiques, jauges, compteurs)
-- ⚙️ Personnalisation des vues selon les besoins utilisateur
-- 📄 Export des rapports en PDF/CSV
-
-## 🏗️ Architecture
-
-### 🔧 Backend
-- **Node.js & Express** - Serveur API RESTful
-- **MongoDB & Mongoose** - Base de données et ODM
-- **JWT** - Authentification par token
-- **Joi** - Validation des données
-- **Winston** - Journalisation
-- **Node-cron** - Tâches planifiées
-
-### 🎨 Frontend
-- **React** - Bibliothèque UI
-- **React Router** - Navigation
-- **Axios** - Client HTTP
-- **D3.js** - Visualisations de données avancées
+- **React** - Frontend
+- **Node.js & Express** - Backend API
+- **MongoDB** - Base de données
+- **JWT** - Authentification
 - **Leaflet** - Cartographie interactive
-- **Recharts** - Graphiques et diagrammes
-- **date-fns** - Manipulation de dates
-
-### 🚀 DevOps & Qualité
-- **ESLint & Prettier** - Qualité du code
-- **Jest** - Tests unitaires
-- **Supertest** - Tests d'API
+- **D3.js** - Visualisations de données
+- **Jest** - Tests d'API
 - **Docker** - Conteneurisation
 - **GitHub Actions** - CI/CD
 
 ## 📦 Installation
 
 ### 📋 Prérequis
-- Node.js (v18+)
-- MongoDB (v5+)
+
 - Git
-- Docker et Docker Compose (recommandé)
+- Docker et Docker Compose
 
-### 🚀 Installation Rapide (Windows & Linux)
+### 🚀 Installation avec Docker Compose (Recommandée)
 
-#### Option 1: Installation Automatique
-
-**Windows:**
-```bash
-# Cloner le dépôt
-git clone https://github.com/servais1983/cyberthreat-atlas.git
-cd cyberthreat-atlas
-
-# Lancer l'installation automatique
-install.bat
-```
-
-**Linux/macOS:**
-```bash
-# Cloner le dépôt
-git clone https://github.com/servais1983/cyberthreat-atlas.git
-cd cyberthreat-atlas
-
-# Rendre le script exécutable et lancer l'installation
-chmod +x install.sh
-./install.sh
-```
-
-#### Option 2: Installation avec Docker Compose (Recommandée)
+Pour éviter tout problème de corruption de fichiers ou de synchronisation, suivez strictement ces étapes :
 
 ```bash
-# Cloner le dépôt
-git clone https://github.com/servais1983/cyberthreat-atlas.git
-cd cyberthreat-atlas
+# 1. Créez un nouveau dossier vide
+mkdir cyberthreat-atlas-new
+cd cyberthreat-atlas-new
 
-# Lancer avec Docker Compose
+# 2. Clonez le dépôt (version propre et corrigée)
+git clone https://github.com/servais1983/cyberthreat-atlas.git .
+
+# 3. Construisez et démarrez les conteneurs sans utiliser de cache
+docker-compose build --no-cache
 docker-compose up -d
 ```
 
@@ -133,16 +55,8 @@ L'application sera accessible à :
 - Backend API : http://localhost:5000
 - API Documentation : http://localhost:5000/api-docs
 
-### 🐳 Déploiement avec Docker
+### 🐳 Commandes Docker Utiles
 
-1. **Build et démarrage des conteneurs**
-```bash
-# Depuis la racine du projet
-docker-compose build
-docker-compose up -d
-```
-
-2. **Vérifier les logs**
 ```bash
 # Voir tous les logs
 docker-compose logs -f
@@ -152,14 +66,15 @@ docker-compose logs -f backend
 
 # Logs du frontend uniquement
 docker-compose logs -f frontend
-```
 
-3. **Arrêter les conteneurs**
-```bash
+# Arrêter les conteneurs
 docker-compose down
 
-# Pour supprimer aussi les volumes (base de données)
-docker-compose down -v
+# Nettoyage complet (recommandé en cas de problème)
+docker-compose down
+docker system prune -af --volumes
+docker volume prune -f
+docker builder prune -af
 ```
 
 ### 🔧 Points d'API Importants
@@ -183,22 +98,28 @@ L'API REST est documentée avec Swagger et accessible à l'adresse `/api-docs` l
 ### Problèmes Courants
 
 **Erreur de connexion MongoDB:**
-- Vérifiez que MongoDB est installé et démarré
-- Vérifiez l'URL de connexion dans le fichier `.env`
+- Vérifiez que MongoDB est correctement configuré dans le conteneur
+- Vérifiez les logs avec `docker-compose logs -f mongo`
 
 **Port déjà utilisé:**
-- Changez les ports dans les fichiers `.env` ou `docker-compose.yml`
+- Changez les ports dans le fichier `docker-compose.yml`
 - Arrêtez les services qui utilisent les ports 3000 ou 5000
 
 **Erreur Docker:**
 - Vérifiez que Docker Desktop est démarré
-- Vérifiez les logs avec `docker-compose logs -f`
-- Nettoyez les images : `docker system prune -a`
+- Nettoyez complètement Docker avec les commandes suivantes :
+  ```bash
+  docker-compose down
+  docker system prune -af --volumes
+  docker volume prune -f
+  docker builder prune -af
+  ```
+- Reconstruisez sans cache : `docker-compose build --no-cache`
 
 **Conteneur backend unhealthy:**
-- Vérifiez que la route `/api/v1/health` est accessible
 - Vérifiez les logs du backend avec `docker-compose logs -f backend`
-- Assurez-vous que MongoDB est correctement configuré et accessible
+- Assurez-vous que MongoDB est correctement démarré et accessible
+- Si le problème persiste, essayez de cloner à nouveau le dépôt dans un dossier vide
 
 ## 🚀 Guide de Démarrage Rapide
 
@@ -212,7 +133,6 @@ L'API REST est documentée avec Swagger et accessible à l'adresse `/api-docs` l
 ## 📖 Documentation
 
 La documentation complète est disponible dans le dossier `docs/` :
-
 - 📋 [Conception détaillée](docs/conception_atlas_cybermenaces.md) - Architecture et design du projet
 - ✅ [Validation professionnelle](docs/validation_professionnelle.md) - Conformité aux standards professionnels
 
