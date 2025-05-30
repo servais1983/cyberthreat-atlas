@@ -1,6 +1,6 @@
 # CyberThreat Atlas
 
-![image](https://github.com/user-attachments/files/13993003/cyberthreat-atlas-logo.png)
+![image](cyberthreat.png)
 
 ## À propos
 
